@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý Phim - Admin</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <style>
+        .img-preview {
+            width: 60px;
+            height: 90px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+
+        .table img {
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+
+<body class="bg-light">
+
+    <div class="container py-5">
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+                <h4 class="mb-0 text-primary"><i class="bi bi-film"></i> Danh Sách Phim</h4>
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAddPhim">
+                    <i class="bi bi-plus-circle"></i> Thêm Phim Mới
+                </button>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Ảnh</th>
+                                <th>Tên Phim</th>
+                                <th>Thể Loại</th>
+                                <th>Thời Lượng</th>
+                                <th class="text-center">Thao Tác</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% phims.forEach(p=> { %>
+                                <tr>
+                                    <td><img src="<%= p.HINH_ANH_POSTER %>" class="img-preview" alt="Poster"></td>
+                                    <td>
+                                        <strong>
+                                            <%= p.TEN_PHIM %>
+                                        </strong>
+                                        <div class="small text-muted text-truncate" style="max-width: 200px;">
+                                            <%= p.NOI_DUNG_PHIM %>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-info text-dark">
+                                            <%= p.TEN_THE_LOAI || 'Chưa phân loại' %>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <%= p.THOI_LUONG_PHIM %> phút
+                                    </td>
+                                    <td class="text-center">
+                                        <button class="btn btn-sm btn-outline-danger"
+                                            onclick="confirmDelete('<%= p.MA_PHIM %>')">
+                                            <i class="bi bi-trash"></i> Xóa
+                                        </button>
+                                    </td>
+                                </tr>
+                                <% }) %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalAddPhim" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <form action="/admin/phim/add" method="POST" class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Thêm Phim Mới</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Tên phim</label>
+                            <input type="text" name="ten" class="form-control" required placeholder="Vd: Lật Mặt 7">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Thể loại</label>
+                            <select name="maTL" class="form-select" required>
+                                <option value="">-- Chọn thể loại --</option>
+                                <% theLoais.forEach(tl=> { %>
+                                    <option value="<%= tl.MA_THE_LOAI %>">
+                                        <%= tl.TEN_THE_LOAI %>
+                                    </option>
+                                    <% }) %>
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Thời lượng (phút)</label>
+                            <input type="number" name="thoiluong" class="form-control" required placeholder="120">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Giới hạn tuổi</label>
+                            <input type="number" name="tuoi" class="form-control" required
+                                placeholder="Ví dụ: 13, 16, 18">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Đạo diễn</label>
+                            <input type="text" name="daodien" class="form-control" placeholder="Tên đạo diễn">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Diễn viên</label>
+                            <input type="text" name="dienvien" class="form-control"
+                                placeholder="Tên các diễn viên chính">
+                        </div>
+
+                        <div class="col-12 mb-3">
+                            <label class="form-label">Link Trailer (Youtube)</label>
+                            <input type="text" name="trailer" class="form-control"
+                                placeholder="https://youtube.com/...">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Link Ảnh Poster (Dọc)</label>
+                            <input type="text" name="poster" class="form-control" required placeholder="https://...">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Link Ảnh Nền (Ngang)</label>
+                            <input type="text" name="nen" class="form-control" placeholder="https://...">
+                        </div>
+
+                        <div class="col-12">
+                            <label class="form-label">Nội dung phim</label>
+                            <textarea name="noidung" class="form-control" rows="3" required></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                    <button type="submit" class="btn btn-primary">Lưu Phim</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        async function confirmDelete(id) {
+            if (confirm('Bạn có chắc chắn muốn xóa phim này không?')) {
+                const response = await fetch(`/admin/phim/delete/${id}`, { method: 'DELETE' });
+                const result = await response.json();
+                if (result.success) {
+                    location.reload();
+                } else {
+                    alert(result.message);
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>

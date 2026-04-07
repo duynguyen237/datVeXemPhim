@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <%- include('partials/head') %>
+        <title>whyCinema - Trang chủ</title>
+        <link rel="stylesheet" href="/css/home.css">
+</head>
+
+<body class="bg-dark text-white">
+    <%- include('partials/header') %>
+
+        <div class="hero-section container-fluid px-0 mb-5">
+            <div id="heroCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="5000">
+
+                <% if (heroMovies && heroMovies.length> 1) { %>
+                    <div class="carousel-indicators">
+                        <% heroMovies.forEach((_, index)=> { %>
+                            <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="<%= index %>"
+                                class="<%= index === 0 ? 'active' : '' %>" aria-label="Slide <%= index + 1 %>"></button>
+                            <% }); %>
+                    </div>
+                    <% } %>
+
+                        <div class="carousel-inner">
+                            <% if (heroMovies && heroMovies.length> 0) { %>
+                                <% heroMovies.forEach((movie, index)=> { %>
+                                    <div class="carousel-item <%= index === 0 ? 'active' : '' %>">
+                                        <div class="hero-banner"
+                                            style="background-image: linear-gradient(to top, #121212 10%, rgba(0,0,0,0.1) 60%), url('<%= movie.HINH_ANH_NEN %>');">
+
+                                            <div class="container hero-content">
+                                                <span class="badge bg-danger mb-3 px-3 py-2 rounded-pill shadow">
+                                                    T<%= movie.GIOI_HAN_TUOI %>+
+                                                </span>
+
+                                                <h1 class="display-3 fw-bold mb-3 text-uppercase">
+                                                    <%= movie.TEN_PHIM %>
+                                                </h1>
+
+                                                <p class="lead text-white-50 mb-4 max-width-600">
+                                                    <%= movie.NOI_DUNG_PHIM %>
+                                                </p>
+
+                                                <div class="d-flex gap-3">
+                                                    <a href="/chitietphim?id=<%= movie.MA_PHIM %>"
+                                                        class="btn btn-danger btn-lg px-5 fw-bold rounded-pill shadow-lg">
+                                                        ĐẶT VÉ NGAY
+                                                    </a>
+                                                    <button class="btn btn-outline-light btn-lg px-4 rounded-pill">
+                                                        <i class="bi bi-play-circle me-2"></i>Xem Trailer
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <% }); %>
+                                        <% } else { %>
+                                            <div class="carousel-item active">
+                                                <div class="hero-banner d-flex align-items-center justify-content-center"
+                                                    style="background-color: #1a1a1a;">
+                                                    <div class="text-center">
+                                                        <div class="spinner-grow text-danger mb-3" role="status"></div>
+                                                        <h2 class="text-secondary">Đang cập nhật danh sách phim...</h2>
+                                                        <p class="text-muted">Vui lòng kiểm tra dữ liệu trong bảng PHIM
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <% } %>
+                        </div>
+
+                        <% if (heroMovies && heroMovies.length> 1) { %>
+                            <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel"
+                                data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel"
+                                data-bs-slide-to="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            </button>
+                            <% } %>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="filter-wrapper shadow-lg mb-5">
+                <div class="row align-items-center g-3">
+                    <div class="col-md-5">
+                        <div class="search-input-group">
+                            <i class="bi bi-search text-secondary"></i>
+                            <input type="text" id="movie-search" class="form-control"
+                                placeholder="Tìm kiếm phim, rạp chiếu...">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <select class="form-select select-custom">
+                            <option selected>Tất cả khu vực</option>
+                            <option>An Giang</option>
+                            <option>Long Xuyên</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4 text-end">
+                        <div class="btn-group w-100" role="group">
+                            <input type="radio" class="btn-check" name="btnradio" id="btnradio1" checked>
+                            <label class="btn btn-outline-danger rounded-start-pill" for="btnradio1">Đang chiếu</label>
+                            <input type="radio" class="btn-check" name="btnradio" id="btnradio2">
+                            <label class="btn btn-outline-danger rounded-end-pill" for="btnradio2">Sắp chiếu</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-header d-flex justify-content-between align-items-end mb-4">
+                <div>
+                    <h2 class="text-white fw-bold mb-0 title-border">PHIM ĐANG CHIẾU</h2>
+                    <p class="text-secondary small mb-0 mt-1">Khám phá những siêu phẩm điện ảnh mới nhất</p>
+                </div>
+                <a href="/tat-ca-phim" class="text-danger text-decoration-none fw-bold small">
+                    Xem tất cả <i class="bi bi-chevron-right"></i>
+                </a>
+            </div>
+
+            <div id="movie-grid" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 mb-5">
+                <div class="col-12 text-center py-5">
+                    <div class="spinner-border text-danger" role="status"></div>
+                    <p class="mt-2 text-muted">Đang tải danh sách phim...</p>
+                </div>
+            </div>
+        </div>
+
+        <%- include('partials/footer') %>
+            <script src="/js/app.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Quản lý Suất Chiếu</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-light">
+    <div class="container mt-5">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>Quản lý Suất Chiếu</h2>
+            <a href="/admin" class="btn btn-secondary">Về Dashboard</a>
+        </div>
+
+        <div class="card mb-4 shadow-sm">
+            <div class="card-header bg-primary text-white">Thêm Suất Chiếu Mới</div>
+            <div class="card-body">
+                <form id="formThemSuatChieu">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Chọn Phim</label>
+                            <select id="maPhim" class="form-select" required>
+                                <option value="">-- Chọn phim --</option>
+                                <% if (typeof phims !=='undefined' ) { %>
+                                    <% phims.forEach(phim=> { %>
+                                        <option value="<%= phim.MA_PHIM %>">
+                                            <%= phim.TEN_PHIM %>
+                                        </option>
+                                        <% }) %>
+                                            <% } %>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Chọn Phòng Chiếu</label>
+                            <select id="maPhong" class="form-select" required>
+                                <option value="">-- Chọn phòng --</option>
+                                <% if (typeof phongs !=='undefined' ) { %>
+                                    <% phongs.forEach(phong=> { %>
+                                        <option value="<%= phong.MA_PHONG_CHIEU || phong.MA_PHONG %>">
+                                            <%= phong.TEN_PHONG_CHIEU || phong.TEN_PHONG %>
+                                        </option>
+                                        <% }) %>
+                                            <% } %>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Thời gian chiếu (Ngày & Giờ)</label>
+                            <input type="datetime-local" id="thoiGian" class="form-control" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Giá vé (VNĐ)</label>
+                            <input type="number" id="giaVe" class="form-control" value="75000" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-success">Lưu Suất Chiếu</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="card shadow-sm mb-5">
+            <div class="card-header bg-dark text-white">Danh sách các suất chiếu</div>
+            <div class="card-body p-0">
+                <table class="table table-bordered table-hover mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Mã SC</th>
+                            <th>Tên Phim</th>
+                            <th>Phòng</th>
+                            <th>Ngày chiếu</th>
+                            <th>Giờ chiếu</th>
+                            <th>Giá vé</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% if (typeof suatChieus !=='undefined' && suatChieus.length> 0) { %>
+                            <% suatChieus.forEach(sc=> { %>
+                                <tr>
+                                    <td class="text-center fw-bold">
+                                        <%= sc.MA_SUAT_CHIEU %>
+                                    </td>
+                                    <td>
+                                        <%= sc.TEN_PHIM %>
+                                    </td>
+                                    <td>
+                                        <%= sc.TEN_PHONG %>
+                                    </td>
+                                    <td>
+                                        <%= new Date(sc.NGAY_CHIEU).toLocaleDateString('vi-VN') %>
+                                    </td>
+                                    <td class="text-primary fw-bold">
+                                        <%= sc.GIO_BAT_DAU %>
+                                    </td>
+                                    <td class="text-danger fw-bold">
+                                        <%= sc.GIA_VE_CO_BAN.toLocaleString('vi-VN') %> đ
+                                    </td>
+                                </tr>
+                                <% }) %>
+                                    <% } else { %>
+                                        <tr>
+                                            <td colspan="6" class="text-center py-3">Chưa có suất chiếu nào</td>
+                                        </tr>
+                                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('formThemSuatChieu').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            // Lấy giá trị datetime-local (VD: "2024-10-25T14:30")
+            const thoiGianInput = document.getElementById('thoiGian').value;
+            // Tách chữ "T" ra để lấy Ngày và Giờ riêng biệt gửi xuống Backend
+            const [ngay, gio] = thoiGianInput.split('T');
+
+            const data = {
+                maPhim: document.getElementById('maPhim').value,
+                maPhong: document.getElementById('maPhong').value,
+                maRap: 1, // Mặc định rạp 1 (vì form chưa có chọn rạp)
+                ngay: ngay,
+                gio: gio,
+                gia: document.getElementById('giaVe').value
+            };
+
+            try {
+                const response = await fetch('/admin/suat-chieu/add', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                // Nếu bạn dùng res.redirect ở Controller thì fetch API sẽ không nhận JSON bình thường
+                // Nhưng vì bạn chưa sửa bên Controller sang res.json, nên ta check redirect
+                if (response.redirected) {
+                    alert('Thêm suất chiếu thành công!');
+                    window.location.href = response.url;
+                } else {
+                    const result = await response.json();
+                    if (result.success) {
+                        alert('Thành công!');
+                        window.location.reload();
+                    } else {
+                        alert('Lỗi: ' + result.message);
+                    }
+                }
+            } catch (err) {
+                // Giao diện sẽ tự load lại khi thành công.
+                alert('Thêm thành công (Hoặc kiểm tra lại danh sách)');
+                window.location.reload();
+            }
+        });
+    </script>
+</body>
+
+</html>

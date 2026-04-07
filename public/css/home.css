@@ -1,0 +1,83 @@
+/* Banner phong cách MoMo Cinema */
+.hero-banner {
+    height: 80vh;
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+}
+
+.hero-content {
+    z-index: 2;
+}
+
+.max-width-600 {
+    max-width: 600px;
+}
+
+/* Thanh lọc phim nổi trên nền */
+.filter-wrapper {
+    background: #1e1e1e;
+    padding: 20px 30px;
+    border-radius: 20px;
+    margin-top: -50px;
+    position: relative;
+    z-index: 10;
+    border: 1px solid #333;
+}
+
+.search-input-group {
+    display: flex;
+    align-items: center;
+    background: #2a2a2a;
+    border-radius: 12px;
+    padding: 5px 15px;
+}
+
+.search-input-group input {
+    background: transparent;
+    border: none;
+    color: white;
+}
+
+.select-custom {
+    background-color: #2a2a2a;
+    border: none;
+    color: white;
+    border-radius: 12px;
+}
+
+/* Tiêu đề có gạch đỏ bên cạnh */
+.title-border {
+    border-left: 5px solid #e50914;
+    padding-left: 15px;
+}
+
+/* Hiệu ứng Movie Card */
+.movie-item-wrapper {
+    transition: transform 0.3s ease;
+    cursor: pointer;
+}
+
+.movie-item-wrapper:hover {
+    transform: translateY(-10px);
+}
+
+.movie-poster-container {
+    position: relative;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+}
+
+.rating-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(0, 0, 0, 0.8);
+    padding: 2px 8px;
+    border-radius: 6px;
+    font-weight: bold;
+    color: #ffc107;
+    font-size: 0.8rem;
+}

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thanh toán thành công - MovieTicket</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #f8f9fa; }
+        .ticket-card { border: none; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        .ticket-header { background: linear-gradient(135deg, #28a745, #218838); border-radius: 15px 15px 0 0; }
+        .qr-code { background: #fff; padding: 10px; border-radius: 10px; border: 1px solid #ddd; }
+        .ticket-info label { color: #6c757d; font-size: 0.9rem; margin-bottom: 0; }
+        .ticket-info p { font-weight: 600; color: #333; }
+    </style>
+</head>
+<body>
+    <div class="container py-5">
+        <div class="card ticket-card mx-auto" style="max-width: 500px;">
+            <div class="ticket-header text-white text-center p-4">
+                <h2 class="mb-0">ĐẶT VÉ THÀNH CÔNG</h2>
+                <small>Cảm ơn bạn đã lựa chọn dịch vụ của chúng tôi</small>
+            </div>
+            
+            <div class="card-body p-4">
+                <div class="text-center mb-4">
+                    <div class="qr-code d-inline-block">
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=HOADON-<%= data.MA_HOA_DON %>" alt="Mã QR Vé">
+                    </div>
+                    <p class="text-muted mt-2 small italic">Đưa mã này cho nhân viên tại rạp để nhận vé</p>
+                </div>
+
+                <div class="row ticket-info">
+                    <div class="col-6 mb-3">
+                        <label>Mã hóa đơn</label>
+                        <p>#<%= data.MA_HOA_DON %></p>
+                    </div>
+                    <div class="col-6 mb-3">
+                        <label>Ngày đặt</label>
+                        <p><%= new Date().toLocaleDateString('vi-VN') %></p>
+                    </div>
+                    <div class="col-12 mb-3">
+                        <label>Tên phim</label>
+                        <p class="fs-5 text-primary"><%= data.TEN_PHIM %></p>
+                    </div>
+                    <div class="col-6 mb-3">
+                        <label>Suất chiếu</label>
+                        <p><%= data.GIO_CHIEU %> | <%= data.NGAY_CHIEU %></p>
+                    </div>
+                    <div class="col-6 mb-3">
+                        <label>Số ghế</label>
+                        <p><span class="badge bg-danger fs-6"><%= data.DANH_SACH_GHE %></span></p>
+                    </div>
+                </div>
+
+                <hr class="my-3">
+                
+                <div class="d-flex justify-content-between align-items-center">
+                    <span class="h5 mb-0">Tổng thanh toán:</span>
+                    <span class="h4 mb-0 text-success"><%= data.TONG_TIEN.toLocaleString('vi-VN') %> VNĐ</span>
+                </div>
+            </div>
+
+            <div class="card-footer bg-white border-0 p-4 text-center">
+                <a href="/" class="btn btn-outline-secondary px-4 me-2">Trang chủ</a>
+                <button onclick="window.print()" class="btn btn-primary px-4">In vé</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
