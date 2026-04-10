@@ -10,7 +10,7 @@ const { poolPromise } = require('./config/db');
 
 // 1. Cấu hình EJS
 app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', path.join(__dirname, 'views'));   
 
 // 2. Middlewares
 app.use(cors());
