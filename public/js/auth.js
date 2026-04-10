@@ -20,17 +20,6 @@ async function handleAuth() {
 
         if (result.success) {
             localStorage.setItem('user', JSON.stringify(result.user));
-            
-            // Thông báo thành công và chuyển trang
-            Swal.fire({
-                icon: 'success',
-                title: 'Đăng nhập thành công!',
-                text: `Chào mừng ${result.user.HO_TEN} trở lại`,
-                timer: 1500,
-                showConfirmButton: false
-            }).then(() => {
-                window.location.href = '/'; 
-            });
         } else {
             Swal.fire({ icon: 'error', title: 'Lỗi!', text: result.message || 'Đăng nhập thất bại!' });
         }

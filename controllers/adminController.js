@@ -76,50 +76,80 @@ class AdminController {
         }
     }
 
+    // Thêm vào AdminController
+    async getPhongsByRap(req, res) {
+        try {
+            const maRap = req.params.maRap;
+            // Gọi hàm từ phongModel để lấy phòng của rạp cụ thể
+            const phongs = await phongModel.getByRap(maRap);
+            res.json({ success: true, data: phongs });
+        } catch (error) {
+            res.status(500).json({ success: false, message: "Lỗi server" });
+        }
+    }
+
     // ==========================================
     // 3. QUẢN LÝ PHÒNG & TỰ ĐỘNG TẠO GHẾ
     // ==========================================
+
     // Hiển thị giao diện danh sách phòng chiếu
+    // adminController.js
+
+    // adminController.js
+
     async listPhong(req, res) {
         try {
-            // Gọi hàm getAll từ phongModel để lấy danh sách phòng
-            const phongs = await phongModel.getAll();
+            // Chạy song song 2 query:
+            // 1. Lấy danh sách phòng (kèm COUNT ghế và JOIN rạp theo SQL mới của bạn)
+            // 2. Lấy danh sách rạp để hiển thị trong <select> khi thêm phòng
+            const [phongs, raps] = await Promise.all([
+                phongModel.getAll(), // Hàm này sử dụng câu lệnh SELECT bạn vừa gửi
+                rapModel.getAll()    // Đảm bảo rapModel lấy từ bảng THONG_TIN_RAP
+            ]);
 
-            // Render ra file views/admin/phong.ejs và truyền mảng 'phongs' sang
-            res.render('admin/phong', { phongs: phongs });
+            res.render('admin/phong', {
+                phongs: phongs,
+                raps: raps
+            });
         } catch (error) {
             console.error("Lỗi tải trang quản lý phòng:", error.message);
-            res.status(500).send("Lỗi tải trang quản lý phòng chiếu.");
+            res.status(500).send("Lỗi server.");
         }
     }
+
     async addPhongVaGhe(req, res) {
         try {
-            const tenPhong = req.body.tenPhong;
-            const maRap = parseInt(req.body.maRap) || 1; // Mặc định rạp 1
-            const soHang = parseInt(req.body.soHang);
-            const soCot = parseInt(req.body.soCot);
+            const { tenPhong, soHang, soCot, maRap } = req.body;
 
-            // 1. Tạo phòng
-            const result = await phongModel.create({ ten: tenPhong, maRap, soHang, soCot });
+            // 1. Tạo phòng mới gắn với mã rạp thực tế
+            const result = await phongModel.create({
+                ten: tenPhong,
+                maRap: parseInt(maRap),
+                soHang: parseInt(soHang),
+                soCot: parseInt(soCot)
+            });
+
+            // Lấy mã phòng vừa tạo (tùy thuộc vào Database có trả về recordset hay không)
             const maPhongMoi = result.recordset[0].MA_PHONG_CHIEU;
 
-            // 2. Tự động tạo ghế
+            // 2. Tự động sinh sơ đồ ghế vào bảng GHE_NGOI
             const chuCai = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
             for (let i = 0; i < soHang; i++) {
                 for (let j = 1; j <= soCot; j++) {
                     const tenGhe = chuCai[i] + j;
-                    const giaGhe = (i < 3) ? 20000 : 0; // 3 hàng đầu VIP
+                    const giaGhe = (i < 3) ? 20000 : 0;
+                    // Đảm bảo gheModel.insertGhe đã đổi tên bảng thành GHE_NGOI
                     await gheModel.insertGhe({ maPhong: maPhongMoi, tenGhe, gia: giaGhe });
                 }
             }
 
-            // SỬA Ở ĐÂY: Trả về JSON thay vì redirect
-            res.json({ success: true, message: "Tạo phòng và sinh sơ đồ ghế thành công!" });
+            res.json({ success: true, message: "Tạo phòng và sinh ghế thành công!" });
         } catch (error) {
-            console.error("Lỗi tạo phòng và ghế:", error.message);
+            console.error("Lỗi:", error.message);
             res.status(500).json({ success: false, message: error.message });
         }
     }
+
     async getSoDoGhe(req, res) {
         try {
             const maPhong = req.params.id;

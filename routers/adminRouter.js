@@ -26,5 +26,7 @@ router.get('/phong', adminController.listPhong);
 router.post('/phong/add', adminController.addPhongVaGhe);
 
 router.get('/phong/:id/ghe', adminController.getSoDoGhe);
+// Cần đảm bảo route này khớp với đường dẫn fetch ở giao diện
+router.get('/api/phongs-by-rap/:maRap', adminController.getPhongsByRap);
 
 module.exports = router;
