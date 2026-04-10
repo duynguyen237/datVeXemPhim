@@ -140,11 +140,9 @@ function updateUI() {
 
     document.getElementById('total-price').innerText = totalTicketPrice.toLocaleString('vi-VN') + ' VNĐ';
 }
-
 // =========================================================
 // PHẦN CHỌN BẮP NƯỚC VÀ XÁC NHẬN (Copy từ logic cũ của bạn)
 // =========================================================
-
 let selectedCombos = {};
 
 async function confirmBooking() {

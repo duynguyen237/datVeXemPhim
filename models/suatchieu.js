@@ -36,27 +36,25 @@ class SuatChieuModel {
     async getAllAdmin() {
         try {
             const pool = await poolPromise;
-            const result = await pool.request().query(`
-                SELECT 
-                    SC.MA_SUAT_CHIEU, 
-                    P.TEN_PHIM, 
-                    PC.TEN_PHONG_CHIEU AS TEN_PHONG, 
-                    SC.NGAY_CHIEU, 
-                    
-                    -- FIX LỖI GIỜ CHIẾU: Ép SQL Server chỉ trả về chuỗi Giờ:Phút (HH:mm)
-                    CONVERT(VARCHAR(5), SC.GIO_BAT_DAU, 108) AS GIO_BAT_DAU, 
-                    
-                    SC.GIA_VE_CO_BAN 
-                FROM SUAT_CHIEU SC
-                JOIN PHIM P ON SC.MA_PHIM = P.MA_PHIM
-                JOIN PHONG_CHIEU PC ON SC.MA_PHONG_CHIEU = PC.MA_PHONG_CHIEU
-                
-                -- FIX LỖI SẮP XẾP: Sắp xếp theo Mã Suất Chiếu giảm dần (Suất mới tạo lên đầu)
-                ORDER BY SC.MA_SUAT_CHIEU DESC
-            `);
+            const sqlQuery = `
+            SELECT 
+                SC.MA_SUAT_CHIEU, 
+                P.TEN_PHIM, 
+                R.TEN_RAP, -- <--- Phải có cột này
+                PC.TEN_PHONG_CHIEU AS TEN_PHONG, 
+                SC.NGAY_CHIEU, 
+                CONVERT(VARCHAR(5), SC.GIO_BAT_DAU, 108) AS GIO_BAT_DAU, 
+                SC.GIA_VE_CO_BAN 
+            FROM SUAT_CHIEU SC
+            JOIN PHIM P ON SC.MA_PHIM = P.MA_PHIM
+            JOIN PHONG_CHIEU PC ON SC.MA_PHONG_CHIEU = PC.MA_PHONG_CHIEU
+            JOIN THONG_TIN_RAP R ON SC.MA_RAP = R.MA_RAP -- <--- Phải JOIN mới có tên
+            ORDER BY SC.MA_SUAT_CHIEU DESC
+        `;
+            const result = await pool.request().query(sqlQuery);
             return result.recordset;
         } catch (error) {
-            console.error("Lỗi lấy danh sách suất chiếu:", error.message);
+            console.error("❌ Lỗi Model getAllAdmin:", error.message);
             throw error;
         }
     }

@@ -5,8 +5,35 @@
     <meta charset="UTF-8">
     <title>Quản lý Phòng Chiếu</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
     <link rel="stylesheet" href="/css/sodoghe.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
+    <style>
+        .dataTables_wrapper {
+            padding: 15px;
+        }
+
+        /* Căn giữa và định dạng cột STT */
+        #tablePhong td:first-child {
+            text-align: center;
+            width: 50px;
+        }
+
+        .seat-row {
+            display: flex;
+            justify-content: center;
+            gap: 5px;
+            margin-bottom: 5px;
+        }
+
+        .screen-cinema {
+            width: 80%;
+            margin: 0 auto 30px;
+            padding: 10px;
+            background: #ccc;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+    </style>
 </head>
 
 <body class="bg-light">
@@ -21,20 +48,31 @@
             <div class="card-body">
                 <form id="formTaoPhong">
                     <div class="row mb-3">
-                        <div class="col-md-4">
+                        <div class="col-md-3">
+                            <label class="form-label fw-bold">Chọn Rạp</label>
+                            <select id="maRap" class="form-select" required>
+                                <option value="">-- Chọn rạp --</option>
+                                <% if (typeof raps !=='undefined' && raps.length> 0) { %>
+                                    <% raps.forEach(r=> { %>
+                                        <option value="<%= r.MA_RAP %>">
+                                            <%= r.TEN_RAP %>
+                                        </option>
+                                        <% }) %>
+                                            <% } %>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
                             <label class="form-label fw-bold">Tên Phòng</label>
                             <input type="text" id="tenPhong" class="form-control" placeholder="VD: Phòng Chiếu 03"
                                 required>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <label class="form-label fw-bold">Số Hàng Ghế (A, B, C...)</label>
                             <input type="number" id="soHang" class="form-control" placeholder="VD: 10" required>
-                            <small class="text-muted">Gợi ý: 10 hàng tương ứng từ A đến J</small>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <label class="form-label fw-bold">Số Cột Ghế (1, 2, 3...)</label>
                             <input type="number" id="soCot" class="form-control" placeholder="VD: 12" required>
-                            <small class="text-muted">Gợi ý: Mỗi hàng có 12 ghế</small>
                         </div>
                     </div>
                     <button type="submit" class="btn btn-success px-4">Lưu Phòng & Tự động tạo ghế</button>
@@ -45,11 +83,12 @@
         <div class="card shadow-sm mb-5">
             <div class="card-header bg-dark text-white fw-bold">Danh sách Phòng đang hoạt động</div>
             <div class="card-body p-0">
-                <table class="table table-bordered table-hover mb-0">
+                <table id="tablePhong" class="table table-bordered table-hover mb-0 w-100">
                     <thead class="table-light">
                         <tr>
-                            <th class="text-center">Mã Phòng</th>
+                            <th class="text-center">STT</th>
                             <th>Tên Phòng</th>
+                            <th>Rạp / Chi nhánh</th>
                             <th class="text-center">Tổng Số Ghế</th>
                             <th class="text-center">Hành động</th>
                         </tr>
@@ -58,14 +97,17 @@
                         <% if (typeof phongs !=='undefined' && phongs.length> 0) { %>
                             <% phongs.forEach(p=> { %>
                                 <tr>
-                                    <td class="text-center fw-bold">
-                                        <%= p.MA_PHONG_CHIEU %>
-                                    </td>
+                                    <td class="text-center fw-bold"></td>
                                     <td>
                                         <%= p.TEN_PHONG_CHIEU %>
                                     </td>
+                                    <td class="fw-bold text-primary">
+                                        <%= p.TEN_RAP || 'Chưa xác định' %>
+                                    </td>
                                     <td class="text-center">
-                                        <%= p.TONG_SO_GHE || 'Đang tính...' %> ghế
+                                        <span class="badge bg-danger">
+                                            <%= p.TONG_SO_GHE %> ghế
+                                        </span>
                                     </td>
                                     <td class="text-center">
                                         <button class="btn btn-sm btn-info text-white fw-bold btn-xem-sodo"
@@ -75,12 +117,7 @@
                                     </td>
                                 </tr>
                                 <% }) %>
-                                    <% } else { %>
-                                        <tr>
-                                            <td colspan="4" class="text-center py-4">Chưa có phòng chiếu nào được tạo.
-                                            </td>
-                                        </tr>
-                                        <% } %>
+                                    <% } %>
                     </tbody>
                 </table>
             </div>
@@ -97,85 +134,86 @@
                 </div>
                 <div class="modal-body bg-light text-center py-4" style="overflow-x: auto;">
                     <div class="screen-cinema">MÀN HÌNH</div>
-
-                    <div id="seatContainer">
-                    </div>
-                </div>
-                <div class="modal-footer justify-content-center bg-white border-top-0">
-                    <div class="d-flex gap-4">
-                        <div class="d-flex align-items-center gap-2">
-                            <span class="seat seat-thuong" style="width: 25px; height: 25px;"></span>
-                            <span class="fw-bold">Ghế Thường</span>
-                        </div>
-                        <div class="d-flex align-items-center gap-2">
-                            <span class="seat seat-vip" style="width: 25px; height: 25px;"></span>
-                            <span class="fw-bold">Ghế VIP</span>
-                        </div>
-                    </div>
+                    <div id="seatContainer"></div>
                 </div>
             </div>
         </div>
     </div>
 
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
 
     <script>
-        // 1. Xử lý Form Lưu Phòng Mới
-        document.getElementById('formTaoPhong').addEventListener('submit', async (e) => {
-            e.preventDefault();
+        $(document).ready(function () {
+            // 1. Khởi tạo DataTable với STT tự động
+            const t = $('#tablePhong').DataTable({
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.13.6/i18n/vi.json"
+                },
+                "pageLength": 10,
+                "columnDefs": [
+                    { "searchable": false, "orderable": false, "targets": 0 },
+                    { "orderable": false, "targets": 4 }
+                ],
+                "order": [[1, 'asc']]
+            });
 
-            const data = {
-                tenPhong: document.getElementById('tenPhong').value,
-                soHang: document.getElementById('soHang').value,
-                soCot: document.getElementById('soCot').value,
-                maRap: 1 // Giả định mã rạp mặc định
-            };
-
-            try {
-                const response = await fetch('/admin/phong/add', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(data)
+            // Tự động đánh STT
+            t.on('order.dt search.dt', function () {
+                let i = 1;
+                t.cells(null, 0, { search: 'applied', order: 'applied' }).every(function (cell) {
+                    this.data(i++);
                 });
+            }).draw();
 
-                const result = await response.json();
-                if (result.success) {
-                    alert('Thành công: ' + result.message);
-                    window.location.reload();
-                } else {
-                    alert('Lỗi: ' + result.message);
+            // 2. Xử lý Form Thêm Phòng
+            $('#formTaoPhong').on('submit', async function (e) {
+                e.preventDefault();
+                const data = {
+                    tenPhong: $('#tenPhong').val(),
+                    soHang: $('#soHang').val(),
+                    soCot: $('#soCot').val(),
+                    maRap: $('#maRap').val()
+                };
+
+                try {
+                    const response = await fetch('/admin/phong/add', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(data)
+                    });
+                    const result = await response.json();
+                    if (result.success) {
+                        alert('Thành công: ' + result.message);
+                        window.location.reload();
+                    } else {
+                        alert('Lỗi: ' + result.message);
+                    }
+                } catch (err) {
+                    alert('Lỗi kết nối máy chủ!');
                 }
-            } catch (err) {
-                console.error(err);
-                alert('Lỗi kết nối đến server!');
-            }
-        });
+            });
 
-        // 2. Xử lý nút "Xem sơ đồ"
-        const modalSoDo = new bootstrap.Modal(document.getElementById('sodoModal'));
-        const btnXemSoDo = document.querySelectorAll('.btn-xem-sodo');
+            // 3. Xem sơ đồ (Event Delegation)
+            const modalSoDo = new bootstrap.Modal(document.getElementById('sodoModal'));
 
-        btnXemSoDo.forEach(btn => {
-            btn.addEventListener('click', async function () {
-                const maPhong = this.getAttribute('data-id');
-                const tenPhong = this.getAttribute('data-ten');
+            $(document).on('click', '.btn-xem-sodo', async function () {
+                const maPhong = $(this).attr('data-id');
+                const tenPhong = $(this).attr('data-ten');
 
-                // Đổi tiêu đề Modal
-                document.getElementById('modalTitle').innerText = `Sơ đồ - ${tenPhong}`;
+                $('#modalTitle').text(`Sơ đồ - ${tenPhong}`);
+                const container = $('#seatContainer');
+                container.html('<div class="spinner-border text-primary my-5" role="status"></div>');
 
-                const container = document.getElementById('seatContainer');
-                container.innerHTML = '<div class="spinner-border text-primary my-5" role="status"></div>';
-
-                // Mở popup lên trước cho mượt
                 modalSoDo.show();
 
                 try {
-                    // Gọi API lấy dữ liệu ghế
                     const response = await fetch(`/admin/phong/${maPhong}/ghe`);
                     const result = await response.json();
 
                     if (result.success) {
-                        // Phân nhóm ghế theo chữ cái đầu (VD: Tất cả ghế A vào mảng 'A')
                         const seatMap = {};
                         result.data.forEach(ghe => {
                             const row = ghe.TEN_GHE_NGOI.charAt(0);
@@ -183,29 +221,20 @@
                             seatMap[row].push(ghe);
                         });
 
-                        // Vẽ HTML sơ đồ
                         let html = '';
                         for (let row in seatMap) {
                             html += `<div class="seat-row">`;
-                            // Cột hiển thị tên Hàng (A, B, C)
                             html += `<div style="width: 30px; line-height: 40px; font-weight: bold; text-align: right; margin-right: 15px;">${row}</div>`;
-
                             seatMap[row].forEach(ghe => {
-                                // Nếu loại ghế là VIP (so sánh không phân biệt hoa/thường)
                                 const seatClass = (ghe.TRANG_THAI_GHE.toLowerCase() === 'vip') ? 'seat-vip' : 'seat-thuong';
                                 html += `<div class="seat ${seatClass}" title="Loại: ${ghe.TRANG_THAI_GHE}">${ghe.TEN_GHE_NGOI}</div>`;
                             });
-
-                            // Cột hiển thị tên Hàng ở bên phải (Tuỳ chọn cho cân đối)
-                            html += `<div style="width: 30px; line-height: 40px; font-weight: bold; text-align: left; margin-left: 15px;">${row}</div>`;
                             html += `</div>`;
                         }
-                        container.innerHTML = html;
-                    } else {
-                        container.innerHTML = `<p class="text-danger fw-bold my-5">${result.message}</p>`;
+                        container.html(html);
                     }
                 } catch (err) {
-                    container.innerHTML = `<p class="text-danger fw-bold my-5">Lỗi kết nối máy chủ!</p>`;
+                    container.html('<p class="text-danger my-5">Lỗi kết nối!</p>');
                 }
             });
         });

@@ -38,7 +38,7 @@ app.get('/', async (req, res) => {
         const pool = await poolPromise;
         const result = await pool.request().query(`
             SELECT TOP 5 
-                MA_PHIM, TEN_PHIM, NOI_DUNG_PHIM, GIOI_HAN_TUOI, HINH_ANH_NEN 
+                MA_PHIM, TEN_PHIM, NOI_DUNG_PHIM, GIOI_HAN_TUOI, HINH_ANH_NEN, DUONG_DAN_TRAILER 
             FROM PHIM 
             ORDER BY MA_PHIM DESC
         `);
@@ -76,6 +76,31 @@ app.get('/lich-su', async (req, res) => {
         }
     } else {
         res.render('lichsu', { lichSu: null });
+    }
+});
+// ROUTE TRANG TẤT CẢ PHIM
+app.get('/tat-ca-phim', async (req, res) => {
+    try {
+        const pool = await poolPromise;
+        // Truy vấn lấy TẤT CẢ phim thay vì chỉ TOP 5 như trang chủ
+        const result = await pool.request().query(`
+            SELECT 
+                MA_PHIM, 
+                TEN_PHIM, 
+                NOI_DUNG_PHIM, 
+                GIOI_HAN_TUOI, 
+                HINH_ANH_NEN 
+            FROM PHIM 
+            ORDER BY MA_PHIM DESC
+        `);
+
+        // Truyền dữ liệu sang file tatcaphim.ejs với biến tên là 'movies'
+        res.render('tatcaphim', {
+            movies: result.recordset
+        });
+    } catch (err) {
+        console.error("Lỗi lấy danh sách tất cả phim:", err.message);
+        res.render('tatcaphim', { movies: [] });
     }
 });
 

@@ -1,83 +1,96 @@
-/* Banner phong cách MoMo Cinema */
-.hero-banner {
-    height: 80vh;
-    background-size: cover;
-    background-position: center;
-    display: flex;
-    align-items: center;
+/* CSS Dành riêng cho trang chủ (phong cách MoMo) */
+
+/* Cấu hình màu chủ đạo */
+:root {
+    --momo-pink: #d82d8b;
+    --momo-pink-dark: #a50064;
 }
 
-.hero-content {
-    z-index: 2;
+/* Đè màu Đỏ (danger) mặc định của Bootstrap thành màu Hồng MoMo */
+.text-danger {
+    color: var(--momo-pink) !important;
 }
 
-.max-width-600 {
-    max-width: 600px;
+.bg-danger {
+    background-color: var(--momo-pink) !important;
 }
 
-/* Thanh lọc phim nổi trên nền */
-.filter-wrapper {
-    background: #1e1e1e;
-    padding: 20px 30px;
-    border-radius: 20px;
-    margin-top: -50px;
-    position: relative;
-    z-index: 10;
-    border: 1px solid #333;
+.btn-danger {
+    background-color: var(--momo-pink) !important;
+    border-color: var(--momo-pink) !important;
 }
 
-.search-input-group {
-    display: flex;
-    align-items: center;
-    background: #2a2a2a;
-    border-radius: 12px;
-    padding: 5px 15px;
+.btn-danger:hover {
+    background-color: var(--momo-pink-dark) !important;
+    border-color: var(--momo-pink-dark) !important;
 }
 
-.search-input-group input {
-    background: transparent;
-    border: none;
-    color: white;
+.btn-outline-danger {
+    color: var(--momo-pink) !important;
+    border-color: var(--momo-pink) !important;
 }
 
-.select-custom {
-    background-color: #2a2a2a;
-    border: none;
-    color: white;
-    border-radius: 12px;
+.btn-outline-danger:hover,
+.btn-check:checked+.btn-outline-danger {
+    background-color: var(--momo-pink) !important;
+    color: #fff !important;
 }
 
-/* Tiêu đề có gạch đỏ bên cạnh */
+/* Gạch dọc màu hồng bên cạnh Tiêu đề */
 .title-border {
-    border-left: 5px solid #e50914;
-    padding-left: 15px;
+    border-left: 5px solid var(--momo-pink);
+    padding-left: 12px;
+}
+
+/* Ẩn thanh cuộn của Dải phim nằm ngang */
+.custom-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+
+.custom-scrollbar {
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
+    scroll-snap-type: x mandatory;
+}
+
+.custom-scrollbar>.movie-card {
+    scroll-snap-align: start;
 }
 
 /* Hiệu ứng Movie Card */
-.movie-item-wrapper {
-    transition: transform 0.3s ease;
+.movie-card {
     cursor: pointer;
 }
 
-.movie-item-wrapper:hover {
-    transform: translateY(-10px);
+.movie-poster-wrapper {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.movie-poster-container {
-    position: relative;
-    border-radius: 15px;
-    overflow: hidden;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+/* Hover: Scale ảnh và nổi shadow */
+.movie-card:hover .movie-poster-wrapper {
+    transform: translateY(-8px);
+    box-shadow: 0 10px 25px rgba(216, 45, 139, 0.3) !important;
 }
 
-.rating-badge {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background: rgba(0, 0, 0, 0.8);
-    padding: 2px 8px;
-    border-radius: 6px;
-    font-weight: bold;
-    color: #ffc107;
-    font-size: 0.8rem;
+/* Overlay nút Play mờ ảo */
+.movie-overlay {
+    background: rgba(0, 0, 0, 0.4);
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+.movie-card:hover .movie-overlay {
+    opacity: 1;
+}
+
+/* Tùy chỉnh input search và select */
+.search-input-group input:focus {
+    outline: none;
+}
+
+.select-custom:focus {
+    box-shadow: none;
+    border-color: var(--momo-pink) !important;
 }

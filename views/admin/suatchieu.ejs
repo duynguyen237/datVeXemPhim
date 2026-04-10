@@ -5,70 +5,117 @@
     <meta charset="UTF-8">
     <title>Quản lý Suất Chiếu</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+    <style>
+        .select2-container--bootstrap-5 .select2-selection {
+            min-height: 38px;
+        }
+
+        .img-poster-select {
+            width: 30px;
+            height: 40px;
+            object-fit: cover;
+            margin-right: 10px;
+            border-radius: 2px;
+        }
+
+        .select2-results__option {
+            display: flex;
+            align-items: center;
+        }
+
+        .dataTables_wrapper {
+            padding: 15px;
+        }
+
+        .card-header {
+            font-size: 1.1rem;
+        }
+    </style>
 </head>
 
 <body class="bg-light">
     <div class="container mt-5">
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <h2>Quản lý Suất Chiếu</h2>
-            <a href="/admin" class="btn btn-secondary">Về Dashboard</a>
+            <h2 class="fw-bold text-dark">Quản lý Suất Chiếu</h2>
+            <a href="/admin" class="btn btn-secondary"><i class="bi bi-speedometer2"></i> Dashboard</a>
         </div>
 
-        <div class="card mb-4 shadow-sm">
-            <div class="card-header bg-primary text-white">Thêm Suất Chiếu Mới</div>
+        <div class="card mb-4 shadow-sm border-0">
+            <div class="card-header bg-primary text-white fw-bold">
+                <i class="bi bi-plus-circle"></i> Thêm Suất Chiếu Mới
+            </div>
             <div class="card-body">
                 <form id="formThemSuatChieu">
                     <div class="row mb-3">
-                        <div class="col-md-6">
-                            <label class="form-label">Chọn Phim</label>
-                            <select id="maPhim" class="form-select" required>
-                                <option value="">-- Chọn phim --</option>
+                        <div class="col-md-4">
+                            <label class="form-label fw-bold">1. Chọn Rạp</label>
+                            <select id="maRap" class="form-select select2-basic" required>
+                                <option value="">-- Tìm rạp --</option>
+                                <% if (typeof raps !=='undefined' ) { %>
+                                    <% raps.forEach(rap=> { %>
+                                        <option value="<%= rap.MA_RAP %>">
+                                            <%= rap.TEN_RAP %>
+                                        </option>
+                                        <% }) %>
+                                            <% } %>
+                            </select>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label fw-bold">2. Chọn Phòng Chiếu</label>
+                            <select id="maPhong" class="form-select select2-basic" required disabled>
+                                <option value="">-- Vui lòng chọn rạp trước --</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label fw-bold">3. Chọn Phim</label>
+                            <select id="maPhim" class="form-select select2-movie" required>
+                                <option value="">-- Tìm phim --</option>
                                 <% if (typeof phims !=='undefined' ) { %>
                                     <% phims.forEach(phim=> { %>
-                                        <option value="<%= phim.MA_PHIM %>">
+                                        <option value="<%= phim.MA_PHIM %>" data-img="<%= phim.HINH_ANH_POSTER %>">
                                             <%= phim.TEN_PHIM %>
                                         </option>
                                         <% }) %>
                                             <% } %>
                             </select>
                         </div>
-                        <div class="col-md-6">
-                            <label class="form-label">Chọn Phòng Chiếu</label>
-                            <select id="maPhong" class="form-select" required>
-                                <option value="">-- Chọn phòng --</option>
-                                <% if (typeof phongs !=='undefined' ) { %>
-                                    <% phongs.forEach(phong=> { %>
-                                        <option value="<%= phong.MA_PHONG_CHIEU || phong.MA_PHONG %>">
-                                            <%= phong.TEN_PHONG_CHIEU || phong.TEN_PHONG %>
-                                        </option>
-                                        <% }) %>
-                                            <% } %>
-                            </select>
-                        </div>
                     </div>
+
                     <div class="row mb-3">
                         <div class="col-md-6">
-                            <label class="form-label">Thời gian chiếu (Ngày & Giờ)</label>
+                            <label class="form-label fw-bold">Thời gian chiếu</label>
                             <input type="datetime-local" id="thoiGian" class="form-control" required>
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label">Giá vé (VNĐ)</label>
+                            <label class="form-label fw-bold">Giá vé cơ bản (VNĐ)</label>
                             <input type="number" id="giaVe" class="form-control" value="75000" required>
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-success">Lưu Suất Chiếu</button>
+
+                    <button type="submit" class="btn btn-success px-5 fw-bold">
+                        <i class="bi bi-save"></i> Lưu Suất Chiếu
+                    </button>
                 </form>
             </div>
         </div>
 
-        <div class="card shadow-sm mb-5">
-            <div class="card-header bg-dark text-white">Danh sách các suất chiếu</div>
+        <div class="card shadow-sm mb-5 border-0">
+            <div class="card-header bg-dark text-white fw-bold">Danh sách các suất chiếu</div>
             <div class="card-body p-0">
-                <table class="table table-bordered table-hover mb-0">
-                    <thead class="table-light">
+                <table id="tableSuatChieu" class="table table-bordered table-hover mb-0 w-100">
+                    <thead class="table-light text-center">
                         <tr>
-                            <th>Mã SC</th>
+                            <th style="width: 50px;">STT</th>
                             <th>Tên Phim</th>
+                            <th>Rạp chiếu</th>
                             <th>Phòng</th>
                             <th>Ngày chiếu</th>
                             <th>Giờ chiếu</th>
@@ -79,81 +126,137 @@
                         <% if (typeof suatChieus !=='undefined' && suatChieus.length> 0) { %>
                             <% suatChieus.forEach(sc=> { %>
                                 <tr>
-                                    <td class="text-center fw-bold">
-                                        <%= sc.MA_SUAT_CHIEU %>
-                                    </td>
-                                    <td>
+                                    <td class="text-center fw-bold"></td>
+                                    <td class="fw-bold">
                                         <%= sc.TEN_PHIM %>
                                     </td>
-                                    <td>
+                                    <td class="text-primary"><i class="bi bi-geo-alt"></i>
+                                        <%= sc.TEN_RAP %>
+                                    </td>
+                                    <td class="text-center">
                                         <%= sc.TEN_PHONG %>
                                     </td>
-                                    <td>
+                                    <td class="text-center">
                                         <%= new Date(sc.NGAY_CHIEU).toLocaleDateString('vi-VN') %>
                                     </td>
-                                    <td class="text-primary fw-bold">
+                                    <td class="text-center text-primary fw-bold">
                                         <%= sc.GIO_BAT_DAU %>
                                     </td>
-                                    <td class="text-danger fw-bold">
+                                    <td class="text-end text-danger fw-bold">
                                         <%= sc.GIA_VE_CO_BAN.toLocaleString('vi-VN') %> đ
                                     </td>
                                 </tr>
                                 <% }) %>
-                                    <% } else { %>
-                                        <tr>
-                                            <td colspan="6" class="text-center py-3">Chưa có suất chiếu nào</td>
-                                        </tr>
-                                        <% } %>
+                                    <% } %>
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
 
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+
     <script>
-        document.getElementById('formThemSuatChieu').addEventListener('submit', async (e) => {
-            e.preventDefault();
+        $(document).ready(function () {
+            // 1. Khởi tạo DataTable với STT tự động
+            // Khởi tạo DataTable với STT tự động
+            const t = $('#tableSuatChieu').DataTable({
+                "language": { "url": "//cdn.datatables.net/plug-ins/1.13.6/i18n/vi.json" },
+                "columnDefs": [{ "searchable": false, "orderable": false, "targets": 0 }],
+                "order": [[4, 'desc'], [5, 'desc']] // Ưu tiên ngày giờ mới nhất
+            });
 
-            // Lấy giá trị datetime-local (VD: "2024-10-25T14:30")
-            const thoiGianInput = document.getElementById('thoiGian').value;
-            // Tách chữ "T" ra để lấy Ngày và Giờ riêng biệt gửi xuống Backend
-            const [ngay, gio] = thoiGianInput.split('T');
+            // Logic đánh số thứ tự STT
+            t.on('order.dt search.dt', function () {
+                let i = 1;
+                t.cells(null, 0, { search: 'applied', order: 'applied' }).every(function (cell) {
+                    this.data(i++);
+                });
+            }).draw();
 
-            const data = {
-                maPhim: document.getElementById('maPhim').value,
-                maPhong: document.getElementById('maPhong').value,
-                maRap: 1, // Mặc định rạp 1 (vì form chưa có chọn rạp)
-                ngay: ngay,
-                gio: gio,
-                gia: document.getElementById('giaVe').value
+            // 2. Khởi tạo Select2 cho Rạp và Phòng
+            $('.select2-basic').select2({ theme: 'bootstrap-5' });
+
+            // Khởi tạo Select2 cho Phim có hình ảnh
+            function formatMovie(movie) {
+                if (!movie.id) return movie.text;
+                var img = $(movie.element).data('img');
+                return $(`<span><img src="${img}" class="img-poster-select" /> ${movie.text}</span>`);
             };
 
-            try {
-                const response = await fetch('/admin/suat-chieu/add', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(data)
-                });
+            $('.select2-movie').select2({
+                theme: 'bootstrap-5',
+                templateResult: formatMovie,
+                templateSelection: formatMovie
+            });
 
-                // Nếu bạn dùng res.redirect ở Controller thì fetch API sẽ không nhận JSON bình thường
-                // Nhưng vì bạn chưa sửa bên Controller sang res.json, nên ta check redirect
-                if (response.redirected) {
-                    alert('Thêm suất chiếu thành công!');
-                    window.location.href = response.url;
-                } else {
+            // 3. Logic lọc phòng theo rạp thông qua API
+            $('#maRap').on('change', async function () {
+                const maRap = $(this).val();
+                const $maPhong = $('#maPhong');
+
+                $maPhong.empty().append('<option value="">-- Đang tải phòng... --</option>').trigger('change');
+                $maPhong.prop('disabled', true);
+
+                if (!maRap) return;
+
+                try {
+                    const response = await fetch(`/admin/api/phongs-by-rap/${maRap}`);
+                    const result = await response.json();
+
+                    if (result.success && result.data.length > 0) {
+                        let html = '<option value="">-- Chọn phòng --</option>';
+                        result.data.forEach(p => {
+                            html += `<option value="${p.MA_PHONG_CHIEU}">${p.TEN_PHONG_CHIEU}</option>`;
+                        });
+                        $maPhong.html(html).prop('disabled', false).trigger('change');
+                    } else {
+                        $maPhong.html('<option value="">Rạp này chưa có phòng</option>').trigger('change');
+                    }
+                } catch (err) {
+                    alert("Lỗi tải danh sách phòng từ máy chủ!");
+                }
+            });
+
+            // 4. Xử lý Form Lưu Suất Chiếu qua Fetch API
+            $('#formThemSuatChieu').on('submit', async function (e) {
+                e.preventDefault();
+                const thoiGian = $('#thoiGian').val();
+                if (!thoiGian) return;
+
+                const [ngay, gio] = thoiGian.split('T');
+                const data = {
+                    maPhim: $('#maPhim').val(),
+                    maRap: $('#maRap').val(),
+                    maPhong: $('#maPhong').val(),
+                    ngay: ngay,
+                    gio: gio,
+                    gia: $('#giaVe').val()
+                };
+
+                try {
+                    const response = await fetch('/admin/suat-chieu/add', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(data)
+                    });
+
                     const result = await response.json();
                     if (result.success) {
-                        alert('Thành công!');
+                        alert('Thêm suất chiếu thành công!');
                         window.location.reload();
                     } else {
                         alert('Lỗi: ' + result.message);
                     }
+                } catch (err) {
+                    console.error("Lỗi gửi dữ liệu:", err);
+                    window.location.reload();
                 }
-            } catch (err) {
-                // Giao diện sẽ tự load lại khi thành công.
-                alert('Thêm thành công (Hoặc kiểm tra lại danh sách)');
-                window.location.reload();
-            }
+            });
         });
     </script>
 </body>
