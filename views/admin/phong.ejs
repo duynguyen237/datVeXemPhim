@@ -11,20 +11,29 @@
         .dataTables_wrapper {
             padding: 15px;
         }
+<<<<<<< HEAD
 
+=======
+>>>>>>> b702d9b7f0c81e7d3feabf109b777af172387f18
         /* Căn giữa và định dạng cột STT */
         #tablePhong td:first-child {
             text-align: center;
             width: 50px;
         }
+<<<<<<< HEAD
 
+=======
+>>>>>>> b702d9b7f0c81e7d3feabf109b777af172387f18
         .seat-row {
             display: flex;
             justify-content: center;
             gap: 5px;
             margin-bottom: 5px;
         }
+<<<<<<< HEAD
 
+=======
+>>>>>>> b702d9b7f0c81e7d3feabf109b777af172387f18
         .screen-cinema {
             width: 80%;
             margin: 0 auto 30px;
@@ -52,6 +61,7 @@
                             <label class="form-label fw-bold">Chọn Rạp</label>
                             <select id="maRap" class="form-select" required>
                                 <option value="">-- Chọn rạp --</option>
+<<<<<<< HEAD
                                 <% if (typeof raps !=='undefined' && raps.length> 0) { %>
                                     <% raps.forEach(r=> { %>
                                         <option value="<%= r.MA_RAP %>">
@@ -67,6 +77,20 @@
                                 required>
                         </div>
                         <div class="col-md-3">
+=======
+                                <% if (typeof raps !=='undefined' && raps.length > 0) { %>
+                                    <% raps.forEach(r => { %>
+                                        <option value="<%= r.MA_RAP %>"><%= r.TEN_RAP %></option>
+                                    <% }) %>
+                                <% } %>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label fw-bold">Tên Phòng</label>
+                            <input type="text" id="tenPhong" class="form-control" placeholder="VD: Phòng Chiếu 03" required>
+                        </div>
+                        <div class="col-md-3">
+>>>>>>> b702d9b7f0c81e7d3feabf109b777af172387f18
                             <label class="form-label fw-bold">Số Hàng Ghế (A, B, C...)</label>
                             <input type="number" id="soHang" class="form-control" placeholder="VD: 10" required>
                         </div>
@@ -94,12 +118,18 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <% if (typeof phongs !=='undefined' && phongs.length> 0) { %>
-                            <% phongs.forEach(p=> { %>
+                        <% if (typeof phongs !=='undefined' && phongs.length > 0) { %>
+                            <% phongs.forEach(p => { %>
                                 <tr>
                                     <td class="text-center fw-bold"></td>
+<<<<<<< HEAD
                                     <td>
                                         <%= p.TEN_PHONG_CHIEU %>
+=======
+                                    <td><%= p.TEN_PHONG_CHIEU %></td>
+                                    <td class="fw-bold text-primary">
+                                        <%= p.TEN_RAP || 'Chưa xác định' %>
+>>>>>>> b702d9b7f0c81e7d3feabf109b777af172387f18
                                     </td>
                                     <td class="fw-bold text-primary">
                                         <%= p.TEN_RAP || 'Chưa xác định' %>
@@ -116,8 +146,13 @@
                                         </button>
                                     </td>
                                 </tr>
+<<<<<<< HEAD
                                 <% }) %>
                                     <% } %>
+=======
+                            <% }) %>
+                        <% } %>
+>>>>>>> b702d9b7f0c81e7d3feabf109b777af172387f18
                     </tbody>
                 </table>
             </div>
@@ -129,8 +164,7 @@
             <div class="modal-content">
                 <div class="modal-header bg-dark text-white">
                     <h5 class="modal-title" id="modalTitle">Sơ đồ ghế</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-                        aria-label="Close"></button>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body bg-light text-center py-4" style="overflow-x: auto;">
                     <div class="screen-cinema">MÀN HÌNH</div>
@@ -146,7 +180,11 @@
     <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
 
     <script>
+<<<<<<< HEAD
         $(document).ready(function () {
+=======
+        $(document).ready(function() {
+>>>>>>> b702d9b7f0c81e7d3feabf109b777af172387f18
             // 1. Khởi tạo DataTable với STT tự động
             const t = $('#tablePhong').DataTable({
                 "language": {
@@ -157,7 +195,11 @@
                     { "searchable": false, "orderable": false, "targets": 0 },
                     { "orderable": false, "targets": 4 }
                 ],
+<<<<<<< HEAD
                 "order": [[1, 'asc']]
+=======
+                "order": [[ 1, 'asc' ]]
+>>>>>>> b702d9b7f0c81e7d3feabf109b777af172387f18
             });
 
             // Tự động đánh STT
@@ -169,7 +211,11 @@
             }).draw();
 
             // 2. Xử lý Form Thêm Phòng
+<<<<<<< HEAD
             $('#formTaoPhong').on('submit', async function (e) {
+=======
+            $('#formTaoPhong').on('submit', async function(e) {
+>>>>>>> b702d9b7f0c81e7d3feabf109b777af172387f18
                 e.preventDefault();
                 const data = {
                     tenPhong: $('#tenPhong').val(),
@@ -198,6 +244,7 @@
 
             // 3. Xem sơ đồ (Event Delegation)
             const modalSoDo = new bootstrap.Modal(document.getElementById('sodoModal'));
+<<<<<<< HEAD
 
             $(document).on('click', '.btn-xem-sodo', async function () {
                 const maPhong = $(this).attr('data-id');
@@ -207,6 +254,17 @@
                 const container = $('#seatContainer');
                 container.html('<div class="spinner-border text-primary my-5" role="status"></div>');
 
+=======
+            
+            $(document).on('click', '.btn-xem-sodo', async function () {
+                const maPhong = $(this).attr('data-id');
+                const tenPhong = $(this).attr('data-ten');
+
+                $('#modalTitle').text(`Sơ đồ - ${tenPhong}`);
+                const container = $('#seatContainer');
+                container.html('<div class="spinner-border text-primary my-5" role="status"></div>');
+
+>>>>>>> b702d9b7f0c81e7d3feabf109b777af172387f18
                 modalSoDo.show();
 
                 try {
