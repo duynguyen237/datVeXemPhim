@@ -9,17 +9,28 @@
         </button>
 
         <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav me-auto ms-4 fw-bold">
-                <li class="nav-item"><a class="nav-link text-danger" href="/">Đặt Vé</a></li>
-                <li class="nav-item"><a class="nav-link" href="/lich-chieu">Lịch chiếu</a></li>
-                <li class="nav-item"><a class="nav-link" href="/rap-chieu">Rạp chiếu</a></li>
-                <li class="nav-item"><a class="nav-link" href="/tat-ca-phim">Phim chiếu</a></li>
+            <ul class="navbar-nav me-auto ms-4 fw-bold gap-3">
+                <li class="nav-item">
+                    <a class="nav-link text-danger fs-6" href="/tat-ca-phim">Phim chiếu</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark fs-6" href="/rap-chieu">Hệ thống rạp</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark fs-6" href="/review-phim">Review phim</a>
+                </li>
             </ul>
 
             <div id="user-info" class="d-flex align-items-center gap-2">
-                <button class="btn btn-link text-secondary fs-5"><i class="bi bi-search"></i></button>
-                <a href="/login" class="btn btn-outline-danger btn-sm">Đăng Nhập</a>
-                <a href="/register" class="btn btn-danger btn-sm">Đăng Ký</a>
+                <button class="btn btn-link text-secondary fs-5 me-2"><i class="bi bi-search"></i></button>
+
+                <% if (typeof userHtml !=='undefined' ) { %>
+                    <%- userHtml %>
+                        <% } else { %>
+                            <a href="/login" class="btn btn-outline-danger btn-sm rounded-pill px-4 fw-bold">Đăng
+                                Nhập</a>
+                            <a href="/register" class="btn btn-danger btn-sm rounded-pill px-4 fw-bold">Đăng Ký</a>
+                            <% } %>
             </div>
         </div>
     </div>

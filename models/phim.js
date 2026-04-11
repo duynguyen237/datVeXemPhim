@@ -3,12 +3,15 @@ const { poolPromise, sql } = require('../config/db');
 class PhimModel {
     async getAll() {
         const pool = await poolPromise;
-        // Join với bảng THE_LOAI để lấy tên thể loại hiển thị ra trang chủ
+        // Thêm subquery để lấy ra NGAY_KHOI_CHIEU (Ngày chiếu sớm nhất của phim đó)
         const result = await pool.request().query(`
-        SELECT p.*, tl.TEN_THE_LOAI 
-        FROM PHIM p
-        LEFT JOIN THE_LOAI tl ON p.MA_THE_LOAI = tl.MA_THE_LOAI
-    `);
+            SELECT 
+                p.*, 
+                tl.TEN_THE_LOAI,
+                (SELECT MIN(NGAY_CHIEU) FROM SUAT_CHIEU sc WHERE sc.MA_PHIM = p.MA_PHIM) AS NGAY_KHOI_CHIEU
+            FROM PHIM p
+            LEFT JOIN THE_LOAI tl ON p.MA_THE_LOAI = tl.MA_THE_LOAI
+        `);
         return result.recordset;
     }
     // Lấy chi tiết 1 bộ phim
@@ -79,6 +82,22 @@ class PhimModel {
         return await pool.request()
             .input('id', sql.Int, id)
             .query("DELETE FROM PHIM WHERE MA_PHIM = @id");
+    }
+    // Thêm vào bên trong class PhimModel (file models/phim.js)
+    // Lấy các phim mà User đã mua vé thành công
+    async getPhimDaXem(maND) {
+        const pool = await poolPromise;
+        const result = await pool.request()
+            .input('maND', sql.Int, maND)
+            .query(`
+                SELECT DISTINCT p.MA_PHIM, p.TEN_PHIM
+                FROM HOA_DON hd
+                JOIN SUAT_CHIEU sc ON hd.MA_SUAT_CHIEU = sc.MA_SUAT_CHIEU
+                JOIN PHIM p ON sc.MA_PHIM = p.MA_PHIM
+                WHERE hd.MA_NGUOI_DUNG = @maND 
+                AND hd.TRANG_THAI_THANH_TOAN IN (N'Thành công', N'Đã thanh toán')
+            `);
+        return result.recordset;
     }
 }
 

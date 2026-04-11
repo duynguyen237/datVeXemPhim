@@ -28,5 +28,21 @@ class DanhGiaModel {
             `);
         return result.recordset;
     }
+    async getRecentReviews(limit = 6) {
+        const pool = await poolPromise;
+        const result = await pool.request()
+            .input('limit', sql.Int, limit)
+            .query(`
+                SELECT TOP (@limit) 
+                    dg.*, 
+                    nd.HO_TEN, 
+                    p.TEN_PHIM 
+                FROM DANH_GIA dg
+                JOIN NGUOI_DUNG nd ON dg.MA_NGUOI_DUNG = nd.MA_NGUOI_DUNG
+                JOIN PHIM p ON dg.MA_PHIM = p.MA_PHIM
+                ORDER BY dg.NGAY_DANH_GIA DESC
+            `);
+        return result.recordset;
+    }
 }
 module.exports = new DanhGiaModel();

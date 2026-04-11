@@ -161,7 +161,6 @@ class AdminController {
             res.status(500).json({ success: false, message: "Lỗi server khi lấy sơ đồ ghế" });
         }
     }
-
     // ==========================================
     // 4. QUẢN LÝ THỐNG KÊ (DASHBOARD)
     // ==========================================
@@ -179,7 +178,6 @@ class AdminController {
             res.status(500).send("Lỗi server khi tải trang thống kê.");
         }
     }
-
     // ==========================================
     // 5. QUẢN LÝ KHÁCH HÀNG (USERS)
     // ==========================================
@@ -249,7 +247,7 @@ class AdminController {
             // Trả về HTML thông báo thành công
             res.send(`
                 <div style="font-family: Arial, sans-serif; text-align: center; margin-top: 50px;">
-                    <h2 style="color: #28a745;">Thành công rực rỡ!</h2>
+                    <h2 style="color: #28a745;">Thành công</h2>
                     <p>Đã cào và thêm <strong>${soPhimDaThem}</strong> bộ phim vào Database.</p>
                     <br>
                     <a href="/admin/phim" style="padding: 10px 20px; background: #007bff; color: white; text-decoration: none; border-radius: 5px;">Quay lại trang quản lý phim</a>

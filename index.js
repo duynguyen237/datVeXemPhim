@@ -30,24 +30,9 @@ const gheRouter = require('./routers/gheRouter');
 const veRouter = require('./routers/veRouter');
 const adminRouter = require('./routers/adminRouter');
 const sanPhamRouter = require('./routers/sanphamRouter');
+const homeRouter = require('./routers/homeRouter');
 
 // --- ROUTES GIAO DIỆN (VIEW ROUTES) ---
-
-app.get('/', async (req, res) => {
-    try {
-        const pool = await poolPromise;
-        const result = await pool.request().query(`
-            SELECT TOP 5 
-                MA_PHIM, TEN_PHIM, NOI_DUNG_PHIM, GIOI_HAN_TUOI, HINH_ANH_NEN, DUONG_DAN_TRAILER 
-            FROM PHIM 
-            ORDER BY MA_PHIM DESC
-        `);
-        res.render('index', { heroMovies: result.recordset });
-    } catch (err) {
-        console.error("Lỗi lấy dữ liệu banner:", err.message);
-        res.render('index', { heroMovies: [] });
-    }
-});
 
 app.get('/login', (req, res) => res.render('login'));
 app.get('/register', (req, res) => res.render('register'));
@@ -140,6 +125,7 @@ app.use('/api/ve', veRouter);
 app.use('/api/ghe', gheRouter);
 app.use('/api', sanPhamRouter);
 app.use('/admin', adminRouter);
+app.use('/', homeRouter);
 
 // --- START SERVER ---
 

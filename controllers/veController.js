@@ -1,10 +1,6 @@
 const veModel = require('../models/vexemphim');
 const vnpayService = require('../services/vnpayService');
 
-// =====================================================================
-// BỘ NHỚ TẠM (RAM) - LƯU TRỮ THÔNG TIN ĐẶT VÉ TRONG KHI CHỜ THANH TOÁN
-// Lưu ý: Nếu bạn restart server (Ctrl+S), dữ liệu này sẽ mất.
-// =====================================================================
 const pendingOrders = new Map();
 
 class VeController {
