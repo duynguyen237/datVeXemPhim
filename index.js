@@ -56,11 +56,6 @@ app.get('/datve', (req, res) => res.render('datve'));
 app.get('/sodoghe', (req, res) => res.render('sodoghe'));
 app.get('/admin', (req, res) => res.render('admin/dashboard'));
 
-app.get('/thanhtoan', (req, res) => {
-    const { maSC, ghes, combos } = req.query;
-    res.render('thanhtoan', { maSC, ghes, combos });
-});
-
 // ROUTE LỊCH SỬ (SỬ DỤNG hoadonModel)
 app.get('/lich-su', async (req, res) => {
     const maND = req.query.maND;

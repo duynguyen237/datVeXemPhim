@@ -2,301 +2,278 @@
 <html lang="vi">
 
 <head>
-    <meta charset="UTF-8">
-    <title>Quản lý Phòng Chiếu</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="/css/sodoghe.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
-    <style>
-        .dataTables_wrapper {
-            padding: 15px;
-        }
-<<<<<<< HEAD
+    <%- include('../partials/head') %>
+        <meta charset="UTF-8">
+        <title>Quản lý Phòng Chiếu & Sơ Đồ Ghế</title>
+        <link rel="stylesheet" href="/css/admin_dashboard.css">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="/css/sodoghe.css">
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
+        <style>
+            .dataTables_wrapper {
+                padding: 15px;
+            }
 
-=======
->>>>>>> b702d9b7f0c81e7d3feabf109b777af172387f18
-        /* Căn giữa và định dạng cột STT */
-        #tablePhong td:first-child {
-            text-align: center;
-            width: 50px;
-        }
-<<<<<<< HEAD
+            /* Định dạng cột STT */
+            #tablePhong td:first-child {
+                text-align: center;
+                width: 50px;
+            }
 
-=======
->>>>>>> b702d9b7f0c81e7d3feabf109b777af172387f18
-        .seat-row {
-            display: flex;
-            justify-content: center;
-            gap: 5px;
-            margin-bottom: 5px;
-        }
-<<<<<<< HEAD
+            .seat-row {
+                display: flex;
+                justify-content: center;
+                gap: 5px;
+                margin-bottom: 5px;
+            }
 
-=======
->>>>>>> b702d9b7f0c81e7d3feabf109b777af172387f18
-        .screen-cinema {
-            width: 80%;
-            margin: 0 auto 30px;
-            padding: 10px;
-            background: #ccc;
-            border-radius: 5px;
-            font-weight: bold;
-        }
-    </style>
+            .screen-cinema {
+                width: 80%;
+                margin: 0 auto 30px;
+                padding: 10px;
+                background: #ccc;
+                border-radius: 5px;
+                font-weight: bold;
+                text-align: center;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            }
+
+            .card-header {
+                font-size: 1.1rem;
+            }
+
+            .badge-seats {
+                font-size: 0.9rem;
+                padding: 0.5em 0.8em;
+            }
+        </style>
 </head>
 
-<body class="bg-light">
-    <div class="container mt-5">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h2>Quản lý Phòng Chiếu & Sơ Đồ Ghế</h2>
-            <a href="/admin" class="btn btn-secondary">Về Dashboard</a>
-        </div>
+<body class="bg-light text-dark">
+    <%- include('../partials/admin_sidebar') %>
+        <nav class="navbar navbar-dark bg-dark mb-4 shadow-sm">
+            <div class="container px-4">
+                <span class="navbar-brand fw-bold text-danger">ADMIN PANEL</span>
+                <a href="/admin" class="btn btn-outline-light btn-sm"><i class="bi bi-speedometer2"></i> Về
+                    Dashboard</a>
+            </div>
+        </nav>
 
-        <div class="card mb-4 shadow-sm">
-            <div class="card-header bg-success text-white fw-bold">Thêm Phòng Chiếu Mới</div>
-            <div class="card-body">
-                <form id="formTaoPhong">
-                    <div class="row mb-3">
-                        <div class="col-md-3">
-                            <label class="form-label fw-bold">Chọn Rạp</label>
-                            <select id="maRap" class="form-select" required>
-                                <option value="">-- Chọn rạp --</option>
-<<<<<<< HEAD
-                                <% if (typeof raps !=='undefined' && raps.length> 0) { %>
-                                    <% raps.forEach(r=> { %>
-                                        <option value="<%= r.MA_RAP %>">
-                                            <%= r.TEN_RAP %>
-                                        </option>
-                                        <% }) %>
-                                            <% } %>
-                            </select>
+        <div class="container">
+            <div class="row mb-4">
+                <div class="col-12">
+                    <h2 class="fw-bold">Quản lý Phòng Chiếu & Sơ Đồ Ghế</h2>
+                    <hr>
+                </div>
+            </div>
+
+            <div class="card mb-4 shadow-sm border-0">
+                <div class="card-header bg-success text-white fw-bold py-3">
+                    <i class="bi bi-plus-square me-2"></i>Thêm Phòng Chiếu Mới
+                </div>
+                <div class="card-body p-4">
+                    <form id="formTaoPhong">
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-3">
+                                <label class="form-label fw-bold small">Chọn Rạp</label>
+                                <select id="maRap" class="form-select" required>
+                                    <option value="">-- Chọn rạp --</option>
+                                    <% if (typeof raps !=='undefined' && raps.length> 0) { %>
+                                        <% raps.forEach(r=> { %>
+                                            <option value="<%= r.MA_RAP %>">
+                                                <%= r.TEN_RAP %>
+                                            </option>
+                                            <% }) %>
+                                                <% } %>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label fw-bold small">Tên Phòng</label>
+                                <input type="text" id="tenPhong" class="form-control" placeholder="VD: Phòng Chiếu 03"
+                                    required>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label fw-bold small">Số Hàng Ghế (A, B, C...)</label>
+                                <input type="number" id="soHang" class="form-control" placeholder="VD: 10" min="1"
+                                    max="26" required>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label fw-bold small">Số Cột Ghế (1, 2, 3...)</label>
+                                <input type="number" id="soCot" class="form-control" placeholder="VD: 12" min="1"
+                                    max="20" required>
+                            </div>
                         </div>
-                        <div class="col-md-3">
-                            <label class="form-label fw-bold">Tên Phòng</label>
-                            <input type="text" id="tenPhong" class="form-control" placeholder="VD: Phòng Chiếu 03"
-                                required>
+                        <div class="text-end">
+                            <button type="submit" class="btn btn-success px-4 fw-bold shadow-sm">
+                                Lưu Phòng & Tự động tạo ghế
+                            </button>
                         </div>
-                        <div class="col-md-3">
-=======
-                                <% if (typeof raps !=='undefined' && raps.length > 0) { %>
-                                    <% raps.forEach(r => { %>
-                                        <option value="<%= r.MA_RAP %>"><%= r.TEN_RAP %></option>
+                    </form>
+                </div>
+            </div>
+
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-dark text-white fw-bold py-3">
+                    <i class="bi bi-list-ul me-2"></i>Danh sách Phòng đang hoạt động
+                </div>
+                <div class="card-body p-0">
+                    <table id="tablePhong" class="table table-hover align-middle mb-0 w-100">
+                        <thead class="table-light">
+                            <tr>
+                                <th class="text-center">STT</th>
+                                <th>Tên Phòng</th>
+                                <th>Rạp / Chi nhánh</th>
+                                <th class="text-center">Tổng Số Ghế</th>
+                                <th class="text-center">Hành động</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% if (typeof phongs !=='undefined' && phongs.length> 0) { %>
+                                <% phongs.forEach(p=> { %>
+                                    <tr>
+                                        <td class="text-center fw-bold text-secondary"></td>
+                                        <td class="fw-bold text-dark">
+                                            <%= p.TEN_PHONG_CHIEU %>
+                                        </td>
+                                        <td class="text-primary fw-medium">
+                                            <%= p.TEN_RAP || 'Chưa xác định' %>
+                                        </td>
+                                        <td class="text-center">
+                                            <span class="badge bg-danger rounded-pill badge-seats">
+                                                <%= p.TONG_SO_GHE %> ghế
+                                            </span>
+                                        </td>
+                                        <td class="text-center">
+                                            <button
+                                                class="btn btn-sm btn-info text-white fw-bold shadow-sm btn-xem-sodo"
+                                                data-id="<%= p.MA_PHONG_CHIEU %>" data-ten="<%= p.TEN_PHONG_CHIEU %>">
+                                                <i class="bi bi-grid-3x3-gap me-1"></i> Xem sơ đồ
+                                            </button>
+                                        </td>
+                                    </tr>
                                     <% }) %>
-                                <% } %>
-                            </select>
-                        </div>
-                        <div class="col-md-3">
-                            <label class="form-label fw-bold">Tên Phòng</label>
-                            <input type="text" id="tenPhong" class="form-control" placeholder="VD: Phòng Chiếu 03" required>
-                        </div>
-                        <div class="col-md-3">
->>>>>>> b702d9b7f0c81e7d3feabf109b777af172387f18
-                            <label class="form-label fw-bold">Số Hàng Ghế (A, B, C...)</label>
-                            <input type="number" id="soHang" class="form-control" placeholder="VD: 10" required>
-                        </div>
-                        <div class="col-md-3">
-                            <label class="form-label fw-bold">Số Cột Ghế (1, 2, 3...)</label>
-                            <input type="number" id="soCot" class="form-control" placeholder="VD: 12" required>
-                        </div>
+                                        <% } %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="sodoModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-xl modal-dialog-centered">
+                <div class="modal-content border-0 shadow-lg">
+                    <div class="modal-header bg-dark text-white">
+                        <h5 class="modal-title fw-bold" id="modalTitle">Sơ đồ ghế</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
                     </div>
-                    <button type="submit" class="btn btn-success px-4">Lưu Phòng & Tự động tạo ghế</button>
-                </form>
-            </div>
-        </div>
-
-        <div class="card shadow-sm mb-5">
-            <div class="card-header bg-dark text-white fw-bold">Danh sách Phòng đang hoạt động</div>
-            <div class="card-body p-0">
-                <table id="tablePhong" class="table table-bordered table-hover mb-0 w-100">
-                    <thead class="table-light">
-                        <tr>
-                            <th class="text-center">STT</th>
-                            <th>Tên Phòng</th>
-                            <th>Rạp / Chi nhánh</th>
-                            <th class="text-center">Tổng Số Ghế</th>
-                            <th class="text-center">Hành động</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <% if (typeof phongs !=='undefined' && phongs.length > 0) { %>
-                            <% phongs.forEach(p => { %>
-                                <tr>
-                                    <td class="text-center fw-bold"></td>
-<<<<<<< HEAD
-                                    <td>
-                                        <%= p.TEN_PHONG_CHIEU %>
-=======
-                                    <td><%= p.TEN_PHONG_CHIEU %></td>
-                                    <td class="fw-bold text-primary">
-                                        <%= p.TEN_RAP || 'Chưa xác định' %>
->>>>>>> b702d9b7f0c81e7d3feabf109b777af172387f18
-                                    </td>
-                                    <td class="fw-bold text-primary">
-                                        <%= p.TEN_RAP || 'Chưa xác định' %>
-                                    </td>
-                                    <td class="text-center">
-                                        <span class="badge bg-danger">
-                                            <%= p.TONG_SO_GHE %> ghế
-                                        </span>
-                                    </td>
-                                    <td class="text-center">
-                                        <button class="btn btn-sm btn-info text-white fw-bold btn-xem-sodo"
-                                            data-id="<%= p.MA_PHONG_CHIEU %>" data-ten="<%= p.TEN_PHONG_CHIEU %>">
-                                            Xem sơ đồ
-                                        </button>
-                                    </td>
-                                </tr>
-<<<<<<< HEAD
-                                <% }) %>
-                                    <% } %>
-=======
-                            <% }) %>
-                        <% } %>
->>>>>>> b702d9b7f0c81e7d3feabf109b777af172387f18
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal fade" id="sodoModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-xl">
-            <div class="modal-content">
-                <div class="modal-header bg-dark text-white">
-                    <h5 class="modal-title" id="modalTitle">Sơ đồ ghế</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body bg-light text-center py-4" style="overflow-x: auto;">
-                    <div class="screen-cinema">MÀN HÌNH</div>
-                    <div id="seatContainer"></div>
+                    <div class="modal-body bg-light text-center py-5" style="overflow-x: auto;">
+                        <div class="screen-cinema shadow-sm">MÀN HÌNH</div>
+                        <div id="seatContainer" class="p-3"></div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+        <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
 
-    <script>
-<<<<<<< HEAD
-        $(document).ready(function () {
-=======
-        $(document).ready(function() {
->>>>>>> b702d9b7f0c81e7d3feabf109b777af172387f18
-            // 1. Khởi tạo DataTable với STT tự động
-            const t = $('#tablePhong').DataTable({
-                "language": {
-                    "url": "//cdn.datatables.net/plug-ins/1.13.6/i18n/vi.json"
-                },
-                "pageLength": 10,
-                "columnDefs": [
-                    { "searchable": false, "orderable": false, "targets": 0 },
-                    { "orderable": false, "targets": 4 }
-                ],
-<<<<<<< HEAD
-                "order": [[1, 'asc']]
-=======
-                "order": [[ 1, 'asc' ]]
->>>>>>> b702d9b7f0c81e7d3feabf109b777af172387f18
-            });
-
-            // Tự động đánh STT
-            t.on('order.dt search.dt', function () {
-                let i = 1;
-                t.cells(null, 0, { search: 'applied', order: 'applied' }).every(function (cell) {
-                    this.data(i++);
+        <script>
+            $(document).ready(function () {
+                // 1. Khởi tạo DataTable với STT tự động
+                const t = $('#tablePhong').DataTable({
+                    "language": {
+                        "url": "//cdn.datatables.net/plug-ins/1.13.6/i18n/vi.json"
+                    },
+                    "pageLength": 10,
+                    "columnDefs": [
+                        { "searchable": false, "orderable": false, "targets": 0 },
+                        { "orderable": false, "targets": 4 }
+                    ],
+                    "order": [[1, 'asc']]
                 });
-            }).draw();
 
-            // 2. Xử lý Form Thêm Phòng
-<<<<<<< HEAD
-            $('#formTaoPhong').on('submit', async function (e) {
-=======
-            $('#formTaoPhong').on('submit', async function(e) {
->>>>>>> b702d9b7f0c81e7d3feabf109b777af172387f18
-                e.preventDefault();
-                const data = {
-                    tenPhong: $('#tenPhong').val(),
-                    soHang: $('#soHang').val(),
-                    soCot: $('#soCot').val(),
-                    maRap: $('#maRap').val()
-                };
-
-                try {
-                    const response = await fetch('/admin/phong/add', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(data)
+                // Tự động đánh STT khi sắp xếp hoặc tìm kiếm
+                t.on('order.dt search.dt', function () {
+                    let i = 1;
+                    t.cells(null, 0, { search: 'applied', order: 'applied' }).every(function (cell) {
+                        this.data(i++);
                     });
-                    const result = await response.json();
-                    if (result.success) {
-                        alert('Thành công: ' + result.message);
-                        window.location.reload();
-                    } else {
-                        alert('Lỗi: ' + result.message);
-                    }
-                } catch (err) {
-                    alert('Lỗi kết nối máy chủ!');
-                }
-            });
+                }).draw();
 
-            // 3. Xem sơ đồ (Event Delegation)
-            const modalSoDo = new bootstrap.Modal(document.getElementById('sodoModal'));
-<<<<<<< HEAD
+                // 2. Xử lý Form Thêm Phòng
+                $('#formTaoPhong').on('submit', async function (e) {
+                    e.preventDefault();
+                    const data = {
+                        tenPhong: $('#tenPhong').val(),
+                        soHang: $('#soHang').val(),
+                        soCot: $('#soCot').val(),
+                        maRap: $('#maRap').val()
+                    };
 
-            $(document).on('click', '.btn-xem-sodo', async function () {
-                const maPhong = $(this).attr('data-id');
-                const tenPhong = $(this).attr('data-ten');
-
-                $('#modalTitle').text(`Sơ đồ - ${tenPhong}`);
-                const container = $('#seatContainer');
-                container.html('<div class="spinner-border text-primary my-5" role="status"></div>');
-
-=======
-            
-            $(document).on('click', '.btn-xem-sodo', async function () {
-                const maPhong = $(this).attr('data-id');
-                const tenPhong = $(this).attr('data-ten');
-
-                $('#modalTitle').text(`Sơ đồ - ${tenPhong}`);
-                const container = $('#seatContainer');
-                container.html('<div class="spinner-border text-primary my-5" role="status"></div>');
-
->>>>>>> b702d9b7f0c81e7d3feabf109b777af172387f18
-                modalSoDo.show();
-
-                try {
-                    const response = await fetch(`/admin/phong/${maPhong}/ghe`);
-                    const result = await response.json();
-
-                    if (result.success) {
-                        const seatMap = {};
-                        result.data.forEach(ghe => {
-                            const row = ghe.TEN_GHE_NGOI.charAt(0);
-                            if (!seatMap[row]) seatMap[row] = [];
-                            seatMap[row].push(ghe);
+                    try {
+                        const response = await fetch('/admin/phong/add', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(data)
                         });
-
-                        let html = '';
-                        for (let row in seatMap) {
-                            html += `<div class="seat-row">`;
-                            html += `<div style="width: 30px; line-height: 40px; font-weight: bold; text-align: right; margin-right: 15px;">${row}</div>`;
-                            seatMap[row].forEach(ghe => {
-                                const seatClass = (ghe.TRANG_THAI_GHE.toLowerCase() === 'vip') ? 'seat-vip' : 'seat-thuong';
-                                html += `<div class="seat ${seatClass}" title="Loại: ${ghe.TRANG_THAI_GHE}">${ghe.TEN_GHE_NGOI}</div>`;
-                            });
-                            html += `</div>`;
+                        const result = await response.json();
+                        if (result.success) {
+                            alert('Thành công: ' + result.message);
+                            window.location.reload();
+                        } else {
+                            alert('Lỗi: ' + result.message);
                         }
-                        container.html(html);
+                    } catch (err) {
+                        alert('Lỗi kết nối máy chủ!');
                     }
-                } catch (err) {
-                    container.html('<p class="text-danger my-5">Lỗi kết nối!</p>');
-                }
+                });
+
+                // 3. Xem sơ đồ ghế (Fetch API)
+                const modalSoDo = new bootstrap.Modal(document.getElementById('sodoModal'));
+
+                $(document).on('click', '.btn-xem-sodo', async function () {
+                    const maPhong = $(this).attr('data-id');
+                    const tenPhong = $(this).attr('data-ten');
+
+                    $('#modalTitle').text(`Sơ đồ ghế - ${tenPhong}`);
+                    const container = $('#seatContainer');
+                    container.html('<div class="spinner-border text-danger my-5" role="status"></div>');
+
+                    modalSoDo.show();
+
+                    try {
+                        const response = await fetch(`/admin/phong/${maPhong}/ghe`);
+                        const result = await response.json();
+
+                        if (result.success) {
+                            const seatMap = {};
+                            result.data.forEach(ghe => {
+                                const row = ghe.TEN_GHE_NGOI.charAt(0);
+                                if (!seatMap[row]) seatMap[row] = [];
+                                seatMap[row].push(ghe);
+                            });
+
+                            let html = '';
+                            for (let row in seatMap) {
+                                html += `<div class="seat-row">`;
+                                html += `<div style="width: 40px; line-height: 40px; font-weight: bold; text-align: right; margin-right: 15px;">${row}</div>`;
+                                seatMap[row].forEach(ghe => {
+                                    const seatClass = (ghe.TRANG_THAI_GHE.toLowerCase() === 'vip') ? 'seat-vip' : 'seat-thuong';
+                                    html += `<div class="seat ${seatClass}" title="Loại: ${ghe.TRANG_THAI_GHE}">${ghe.TEN_GHE_NGOI}</div>`;
+                                });
+                                html += `</div>`;
+                            }
+                            container.html(html);
+                        }
+                    } catch (err) {
+                        container.html('<p class="text-danger my-5 fw-bold">Không thể tải dữ liệu sơ đồ ghế!</p>');
+                    }
+                });
             });
-        });
-    </script>
+        </script>
 </body>
 
 </html>
