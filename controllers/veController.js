@@ -27,16 +27,16 @@ class VeController {
                 tongTien
             });
 
-            console.log(`> ⏳ Đã đưa đơn hàng ${orderId} vào RAM. Chờ khách thanh toán qua VNPay...`);
+            console.log(`> Đã đưa đơn hàng ${orderId} vào RAM. Chờ khách thanh toán qua VNPay...`);
 
             // Tạo link thanh toán VNPay gửi khách đi
             const paymentUrl = vnpayService.createPaymentUrl(req, tongTien, orderId);
 
-            console.log(`> ✅ Đã tạo link thanh toán thành công.`);
+            console.log(`> Đã tạo link thanh toán thành công.`);
             res.json({ success: true, paymentUrl });
 
         } catch (error) {
-            console.error("❌ LỖI TẠI HÀM DATVE:", error.message);
+            console.error("LỖI TẠI HÀM DATVE:", error.message);
             res.status(500).json({ success: false, message: error.message });
         }
     }
@@ -100,7 +100,7 @@ class VeController {
                 res.render('ketquathanhtoan', { success: true, data: thongTinVe });
 
             } else {
-                console.log("⚠️ Giao dịch thất bại hoặc sai chữ ký.");
+                console.log("Giao dịch thất bại hoặc sai chữ ký.");
                 res.render('ketquathanhtoan', { success: false, message: "Thanh toán không thành công." });
             }
         } catch (error) {

@@ -26,7 +26,6 @@ function loadUserInfo() {
         }
     }
 }
-
 // 2. TÍNH TIỀN VÀ HIỂN THỊ ĐƠN HÀNG (TỐI ƯU GỌN LẠI VÀ CHẠY SONG SONG)
 async function loadOrderDetails() {
     const body = document.getElementById('billing-body');

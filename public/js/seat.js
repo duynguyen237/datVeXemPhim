@@ -1,5 +1,4 @@
 /* public/js/seat.js */
-
 // Khởi tạo các biến global
 const urlParams = new URLSearchParams(window.location.search);
 const currentMaSuatChieu = urlParams.get('maSuatChieu') || urlParams.get('id');
@@ -221,5 +220,5 @@ function goToPayment() {
         .map(id => `${id}:${selectedCombos[id].qty}`)
         .join('|');
 
-    window.location.href = `/thanhtoan?maSC=${currentMaSuatChieu}&ghes=${seatIds}&combos=${comboData}`;
+    window.location.href = `/api/ve/thanhtoan?maSC=${currentMaSuatChieu}&ghes=${seatIds}&combos=${comboData}`;
 }

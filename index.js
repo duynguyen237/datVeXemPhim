@@ -22,7 +22,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 // 3. Import Models & Routers
 // LƯU Ý: Chỉ khai báo hoadonModel DUY NHẤT 1 lần ở đây
 const hoadonModel = require('./models/hoadon');
-
 const phimRouter = require('./routers/phimRouter');
 const suatChieuRouter = require('./routers/suatChieuRouter');
 const authRouter = require('./routers/authRouter');
@@ -33,7 +32,6 @@ const sanPhamRouter = require('./routers/sanphamRouter');
 const homeRouter = require('./routers/homeRouter');
 
 // --- ROUTES GIAO DIỆN (VIEW ROUTES) ---
-
 app.get('/login', (req, res) => res.render('login'));
 app.get('/register', (req, res) => res.render('register'));
 app.get('/chitietphim', (req, res) => res.render('chitietphim'));
@@ -128,7 +126,6 @@ app.use('/admin', adminRouter);
 app.use('/', homeRouter);
 
 // --- START SERVER ---
-
 const PORT = process.env.PORT || 5000;
 
 app.use((req, res) => {
