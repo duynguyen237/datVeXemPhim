@@ -1,82 +1,70 @@
-# 🎬 DatVeXemPhim - Hệ Thống Đặt Vé Trực Tuyến Thế Hệ Mới
+<div align="center">
+
+# 🎬 DatVeXemPhim - Modern Booking Experience
+
+<img src="https://capsule-render.vercel.app/render?type=waving&color=00b4d8&height=250&section=header&text=DatVeXemPhim&fontSize=80&animation=fadeIn&fontAlignY=35" width="100%"/>
 
 <p align="center">
-  <img src="https://capsule-render.vercel.app/render?type=waving&color=auto&height=250&section=header&text=DatVeXemPhim%20🎬&fontSize=70" />
+  <img src="https://img.shields.io/badge/Status-Live-brightgreen?style=for-the-badge&logo=statuspage" />
+  <img src="https://img.shields.io/badge/Speed-Lightning-yellow?style=for-the-badge&logo=speedtest" />
 </p>
 
-<p align="center">
-  <img src="https://img.shields.io/badge/Maintained%3F-yes-green.svg" />
-  <img src="https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white" />
-  <img src="https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" />
-  <img src="https://img.shields.io/badge/Socket.io-010101?style=for-the-badge&logo=socket.io&logoColor=white" />
+**Hệ thống đặt vé xem phim thời gian thực - Nhanh chóng, mượt mà và bảo mật.**
+
+[Xem Demo Live](https://your-link.com) • [Báo lỗi](https://github.com/user/repo/issues) • [Góp ý](https://github.com/user/repo/pulls)
+
+</div>
+
+---
+
+## 🚀 Trải nghiệm người dùng (UX Animation)
+
+Để tạo hiệu ứng chuyển động trong README, cách tốt nhất là chèn các đoạn GIF quay lại thao tác thực tế:
+
+| 🪑 Chọn ghế Real-time | 🎟️ Thanh toán siêu tốc |
+| :---: | :---: |
+| <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM2Zic3V0N3M0bmE1bmE5bmE5bmE5bmE5bmE5bmE5bmE5bmE5JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/3o7TKMGpx4WFdA3E08/giphy.gif" width="350"> | <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExYTVhNGI1Zjg3M2I0YTVhNGI1Zjg3M2I0YTVhNGI1Zjg3M2I0JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/l41lTfuxV5KInVOKk/giphy.gif" width="350"> |
+| *Ghế tự động khóa khi có người chọn (Socket.io)* | *Tích hợp VNPAY với phản hồi tức thì* |
+
+---
+
+## 🛠️ Công nghệ cốt lõi (Tech Stack)
+
+Sử dụng các icons chuyển động nhẹ khi di chuột qua (tính năng của GitHub Markdown hỗ trợ hiển thị badge):
+
+<p align="left">
+  <a href="https://reactjs.org/" target="_blank"> 
+    <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/react/react-original-wordmark.svg" alt="react" width="40" height="40"/> 
+  </a>
+  <a href="https://nodejs.org" target="_blank"> 
+    <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/nodejs/nodejs-original-wordmark.svg" alt="nodejs" width="40" height="40"/> 
+  </a>
+  <a href="https://www.mongodb.com/" target="_blank"> 
+    <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/mongodb/mongodb-original-wordmark.svg" alt="mongodb" width="40" height="40"/> 
+  </a>
+  <a href="https://tailwindcss.com/" target="_blank"> 
+    <img src="https://www.vectorlogo.zone/logos/tailwindcss/tailwindcss-icon.svg" alt="tailwind" width="40" height="40"/> 
+  </a>
+  <a href="https://socket.io/" target="_blank"> 
+    <img src="https://upload.wikimedia.org/wikipedia/commons/9/96/Socket-io.svg" alt="socketio" width="40" height="40"/> 
+  </a>
 </p>
 
 ---
 
-## 📍 Mục lục
-1. [🚀 Giới thiệu](#-giới-thiệu)
-2. [✨ Tính năng nổi bật](#-tính-năng-nổi-bật)
-3. [📸 Giao diện ứng dụng](#-giao- diện-ứng-dụng)
-4. [🛠️ Tech Stack](#️-tech-stack)
-5. [⚙️ Cài đặt](#️-cài-đặt)
-6. [🗺️ Luồng hoạt động](#️-luồng-hoạt-động)
-7. [📈 Lộ trình phát triển](#-lộ-trình-phát-triển)
+## 🗺️ Quy trình hệ thống (Animated Flow)
 
----
-
-## 🚀 Giới thiệu
-**DatVeXemPhim** giải quyết bài toán đặt vé truyền thống bằng cách cung cấp trải nghiệm **Real-time Seat Selection** (Chọn ghế thời gian thực). Người dùng không còn lo lắng về việc bị trùng ghế hay hệ thống phản hồi chậm.
-
-> **Key Highlight:** Tích hợp Socket.io để cập nhật trạng thái ghế ngay lập tức khi có người khác đang chọn.
-
----
-
-## ✨ Tính năng nổi bật
-
-- 🔐 **Authentication:** Đăng nhập JWT, bảo mật 2 lớp cơ bản.
-- 🎟️ **Real-time Booking:** Chọn ghế và giữ chỗ trong 5 phút.
-- 💳 **Payment:** Tích hợp cổng thanh toán VNPAY/Momo Sandbox.
-- 📱 **Mobile First:** Giao diện tối ưu hoàn hảo cho mọi thiết bị.
-- 📧 **Auto Mail:** Gửi vé kèm mã QR qua Email sau khi thanh toán thành công.
-
----
-
-## 📸 Giao diện ứng dụng
-
-<details>
-  <summary>🔍 Nhấn để xem ảnh màn hình dự án</summary>
-  
-  ### Desktop View
-  | Trang chủ | Trang chọn ghế |
-  | :---: | :---: |
-  | <img src="https://via.placeholder.com/800x450?text=Home+Page+Desktop" width="400"> | <img src="https://via.placeholder.com/800x450?text=Seat+Selection+Desktop" width="400"> |
-
-  ### Mobile View
-  <p align="center">
-    <img src="https://via.placeholder.com/300x600?text=Mobile+UI+1" width="200">
-    <img src="https://via.placeholder.com/300x600?text=Mobile+UI+2" width="200">
-  </p>
-</details>
-
----
-
-## 🛠️ Tech Stack
-
-- **Frontend:** Next.js 14, Tailwind CSS, Framer Motion (hiệu ứng mượt).
-- **Backend:** Node.js, Express, Socket.io.
-- **Database:** MongoDB (Mongoose).
-- **Tools:** Postman, Docker, Git.
-
----
-
-## 🗺️ Luồng hoạt động (User Flow)
+Dùng **Mermaid.js** để tạo sơ đồ trông rất kỹ thuật và chuyên nghiệp:
 
 ```mermaid
-graph LR
-    A[Duyệt phim] --> B[Xem chi tiết/Trailer]
-    B --> C[Chọn Suất & Rạp]
-    C --> D{Chọn ghế}
-    D -- Đang chọn --> E[Socket.io khóa ghế tạm thời]
-    E --> F[Thanh toán Online]
-    F -- Thành công --> G[Nhận vé & QR Code]
-    F -- Thất bại --> D
+sequenceDiagram
+    participant U as Người dùng
+    participant S as Socket Server
+    participant DB as Database
+    
+    U->>S: Click chọn ghế A1
+    S->>S: Khóa tạm thời ghế A1
+    S-->>U: Hiển thị trạng thái "Đang giữ" (Màu vàng)
+    U->>DB: Xác nhận thanh toán
+    DB-->>S: Giao dịch thành công
+    S-->>U: Cập nhật trạng thái "Đã bán" (Màu đỏ)
