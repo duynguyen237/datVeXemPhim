@@ -12,6 +12,9 @@ const { poolPromise } = require('./config/db');
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
+// Thêm vào app.js
+app.get('/thanhtoan', (req, res) => res.render('thanhtoan'));
+
 // 2. Middlewares
 app.use(cors());
 app.use(express.json());
