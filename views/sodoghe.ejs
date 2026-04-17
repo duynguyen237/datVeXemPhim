@@ -3,68 +3,94 @@
 
 <head>
     <%- include('partials/head') %>
-        <link rel="stylesheet" href="/css/seat.css">
-        <title>Chọn Ghế - CinéHub</title>
+    <link rel="stylesheet" href="/css/seat.css">
+    <title>Chọn Ghế - CinéHub</title>
 </head>
 
-<body class="bg-dark text-white">
+<body class="seat-selection-page bg-dark text-white">
     <%- include('partials/header') %>
 
-        <div class="container mt-4 mb-5">
-            <div class="row">
-                <div class="col-md-8">
-                    <div class="card bg-secondary text-white shadow-lg p-4 bordered-card">
+    <div class="container-fluid mt-4 mb-5 px-lg-5">
+        <div class="row g-4">
+            <div class="col-lg-8">
+                <div class="main-content-wrapper p-4 p-lg-5 shadow-lg">
+                    <div class="screen-container mb-5">
+                        <div class="screen-curve mx-auto"></div>
+                        <div class="screen-glow mx-auto"></div>
+                        <p class="text-center screen-text">MÀN HÌNH</p>
+                    </div>
 
-                        <div class="screen mb-5 mx-auto text-center shadow-lg">MÀN HÌNH</div>
-
-                        <div id="seat-map" class="mb-4">
-                            <div class="text-center py-5">
-                                <div class="spinner-border text-danger" role="status"></div>
-                                <p class="mt-2 text-muted">Đang tải sơ đồ ghế...</p>
-                            </div>
-                        </div>
-
-                        <div class="d-flex justify-content-center gap-4 flex-wrap small border-top pt-3">
-                            <div class="legend-item"><span class="badge seat-item available"></span> Trống</div>
-                            <div class="legend-item"><span class="badge seat-item selected"></span> Đang chọn</div>
-                            <div class="legend-item"><span class="badge seat-item occupied"></span> Đã đặt</div>
-                            <div class="legend-item"><span class="badge seat-item vip"></span> VIP</div>
+                    <div id="seat-map" class="mb-5">
+                        <div class="text-center py-5">
+                            <div class="spinner-border text-danger" role="status"></div>
+                            <p class="mt-2 text-white-50">Đang tải sơ đồ ghế...</p>
                         </div>
                     </div>
+
+                    <div class="legend-container d-flex justify-content-center gap-4 flex-wrap small pt-4 border-top border-secondary">
+                        <div class="legend-item"><span class="badge seat-item available"></span> Thường</div>
+                        <div class="legend-item"><span class="badge seat-item available vip"></span> VIP</div>
+                        <div class="legend-item"><span class="badge seat-item selected"></span> Đang chọn</div>
+                        <div class="legend-item"><span class="badge seat-item occupied"></span> Đã đặt</div>
+                    </div>
                 </div>
+            </div>
 
-                <div class="col-md-4">
-                    <div class="card bg-dark border-secondary text-white p-3 sticky-top order-summary-card">
-                        <h4 id="display-movie-name" class="text-danger fw-bold">Tên Phim</h4>
-                        <p id="display-cinema-room" class="text-secondary mb-1">Rạp - Phòng</p>
-                        <p id="display-time" class="small">Giờ chiếu: --:--</p>
-
-                        <hr class="border-secondary">
-
-                        <div class="d-flex justify-content-between mb-2">
-                            <span>Ghế chọn:</span>
-                            <b id="selected-seats-text" class="text-warning">Chưa chọn</b>
+            <div class="col-lg-4">
+                <div class="sidebar-sticky">
+                    <div class="order-summary-container shadow-lg p-4">
+                        <h2 id="display-movie-name" class="movie-title text-danger fw-bold mb-3">Tên Phim</h2>
+                        <div class="movie-info d-flex gap-2 text-secondary mb-3 small">
+                            <span id="display-cinema-room">Rạp - Phòng</span> |
+                            <span id="display-time">--:--</span>
                         </div>
 
-                        <div
-                            class="d-flex justify-content-between align-items-center mt-3 pt-3 border-top border-secondary">
-                            <span class="fs-5">Tổng tiền:</span>
+                        <hr class="border-secondary my-4">
+
+                        <div class="d-flex justify-content-between mb-3 seat-details">
+                            <span>Ghế:</span>
+                            <b id="selected-seats-text" class="text-warning text-end ms-2">Chưa chọn</b>
+                        </div>
+
+                        <div class="price-container d-flex justify-content-between align-items-center mt-4 pt-4 border-top border-secondary">
+                            <span class="fs-5 text-secondary">Tổng tiền:</span>
                             <h3 id="total-price" class="text-danger fw-bold mb-0">0 VNĐ</h3>
                         </div>
 
-                        <button class="btn btn-danger w-100 mt-4 fw-bold py-3 fs-5 btn-book" onclick="confirmBooking()">
+                        <button class="btn btn-danger w-100 mt-5 fw-bold py-3 fs-5 btn-confirm-booking" onclick="confirmBooking()">
                             XÁC NHẬN ĐẶT VÉ
                         </button>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
 
-        <%- include('partials/modal_popcorn') %>
+    <div class="modal fade" id="productModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content bg-dark text-white border-secondary">
+                <div class="modal-header border-secondary">
+                    <h5 class="modal-title text-danger fw-bold">CHỌN BẮP NƯỚC & ƯU ĐÃI</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="product-list" class="row g-3">
+                        </div>
+                </div>
+                <div class="modal-footer border-secondary justify-content-between">
+                    <div>
+                        <span class="text-secondary">Tổng cộng:</span>
+                        <h4 id="total-final" class="text-warning fw-bold mb-0">0 VNĐ</h4>
+                    </div>
+                    <button type="button" class="btn btn-danger px-5 fw-bold" onclick="goToPayment()">THANH TOÁN</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-            <%- include('partials/footer') %>
+    <%- include('partials/footer') %>
 
-                <script src="/js/seat.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/seat.js"></script>
 </body>
-
 </html>

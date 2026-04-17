@@ -17,20 +17,28 @@ class SuatChieuModel {
             `);
         return result.recordset;
     }
+    // models/SuatChieuModel.js
+
     async getDetailById(id) {
         const pool = await poolPromise;
         const result = await pool.request()
             .input('id', sql.Int, id)
             .query(`
-                SELECT SC.MA_SUAT_CHIEU, SC.GIA_VE_CO_BAN, P.TEN_PHIM, R.TEN_RAP, PC.TEN_PHONG_CHIEU,
-                       LEFT(CAST(SC.GIO_BAT_DAU AS TIME), 5) AS GIO_FORMAT,
-                       CONVERT(VARCHAR, SC.NGAY_CHIEU, 103) AS NGAY_FORMAT
-                FROM SUAT_CHIEU SC
-                JOIN PHIM P ON SC.MA_PHIM = P.MA_PHIM
-                JOIN THONG_TIN_RAP R ON SC.MA_RAP = R.MA_RAP
-                JOIN PHONG_CHIEU PC ON SC.MA_PHONG_CHIEU = PC.MA_PHONG_CHIEU
-                WHERE SC.MA_SUAT_CHIEU = @id
-            `);
+            SELECT 
+                SC.MA_SUAT_CHIEU, 
+                SC.GIA_VE_CO_BAN, 
+                P.TEN_PHIM, 
+                P.HINH_ANH_POSTER, -- <--- THÊM DÒNG NÀY ĐỂ LẤY ẢNH
+                R.TEN_RAP, 
+                PC.TEN_PHONG_CHIEU,
+                LEFT(CAST(SC.GIO_BAT_DAU AS TIME), 5) AS GIO_FORMAT,
+                CONVERT(VARCHAR, SC.NGAY_CHIEU, 103) AS NGAY_FORMAT
+            FROM SUAT_CHIEU SC
+            JOIN PHIM P ON SC.MA_PHIM = P.MA_PHIM
+            JOIN THONG_TIN_RAP R ON SC.MA_RAP = R.MA_RAP
+            JOIN PHONG_CHIEU PC ON SC.MA_PHONG_CHIEU = PC.MA_PHONG_CHIEU
+            WHERE SC.MA_SUAT_CHIEU = @id
+        `);
         return result.recordset[0];
     }
     async getAllAdmin() {

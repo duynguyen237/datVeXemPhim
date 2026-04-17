@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hệ thống Khám chữ bệnh ngoại trú</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #0081C9;
+            --secondary: #2ecc71;
+            --bg: #f4f7f6;
+            --sidebar-bg: #1e293b;
+            --danger: #e74c3c;
+            --border: #ddd;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
+        body { display: flex; height: 100vh; background: var(--bg); overflow: hidden; }
+
+        /* Sidebar Dọc */
+        .sidebar { width: 260px; background: var(--sidebar-bg); color: #fff; display: flex; flex-direction: column; }
+        .sidebar-header { padding: 25px; font-size: 22px; font-weight: bold; color: #38bdf8; border-bottom: 1px solid #334155; display: flex; align-items: center; gap: 10px; }
+        .menu-list { flex: 1; padding: 20px 0; }
+        .menu-item { 
+            padding: 15px 25px; color: #94a3b8; cursor: pointer; display: flex; align-items: center; gap: 15px; transition: 0.3s;
+            border-left: 4px solid transparent;
+        }
+        .menu-item:hover, .menu-item.active { background: #334155; color: #fff; border-left-color: #38bdf8; }
+
+        /* Content Area */
+        .main-wrapper { flex: 1; display: flex; flex-direction: column; }
+        header { 
+            height: 65px; background: #fff; display: flex; align-items: center; justify-content: space-between; 
+            padding: 0 30px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); 
+        }
+
+        .container { padding: 25px; overflow-y: auto; flex: 1; }
+        .view-section { display: none; }
+        .view-section.active { display: block; animation: fadeIn 0.3s ease; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Card & UI Components */
+        .card { background: #fff; border-radius: 12px; padding: 25px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-bottom: 25px; }
+        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid #eee; }
+        .card h2 { font-size: 18px; color: #444; }
+
+        /* Grid Form (Dữ liệu chi tiết từ ERD) */
+        .form-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+        .form-group { display: flex; flex-direction: column; gap: 6px; }
+        .span-2 { grid-column: span 2; }
+        .span-3 { grid-column: span 3; }
+        
+        label { font-size: 13px; font-weight: 600; color: #666; }
+        input, select, textarea { padding: 10px; border: 1px solid var(--border); border-radius: 6px; font-size: 14px; outline: none; }
+        input:focus { border-color: var(--primary); }
+
+        /* Table */
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th { text-align: left; padding: 12px; background: #f8f9fa; font-size: 12px; color: #666; border-bottom: 2px solid #eee; text-transform: uppercase; }
+        td { padding: 12px; border-bottom: 1px solid #eee; font-size: 14px; }
+        
+        .badge { padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: bold; }
+        .bg-success { background: #e8f5e9; color: #2e7d32; }
+        .bg-danger { background: #fee2e2; color: #d32f2f; }
+
+        .btn { padding: 10px 20px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 13px; transition: 0.2s; }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-success { background: var(--secondary); color: white; }
+        .btn-ghost { background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; }
+
+        .action-btn { background: none; border: none; cursor: pointer; margin-right: 8px; color: var(--primary); font-size: 16px; }
+
+        /* Modal */
+        .modal { 
+            position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: none; 
+            align-items: center; justify-content: center; z-index: 1000; 
+        }
+        .modal.active { display: flex; }
+        .modal-content { background: #fff; width: 800px; border-radius: 12px; padding: 30px; box-shadow: 0 20px 25px rgba(0,0,0,0.2); }
+    </style>
+</head>
+<body>
+
+    <aside class="sidebar">
+        <div class="sidebar-header"><i class="fa-solid fa-hospital-user"></i>Quản lý</div>
+        <div class="menu-list">
+            <div class="menu-item active" onclick="switchView('reception')"><i class="fa-solid fa-users"></i> Tiếp đón bệnh nhân</div>
+            <div class="menu-item" onclick="switchView('admin')"><i class="fa-solid fa-user-shield"></i> Quản trị tài khoản</div>
+            <div class="menu-item"><i class="fa-solid fa-stethoscope"></i> Khám bệnh</div>
+            <div class="menu-item"><i class="fa-solid fa-pills"></i> Nhà thuốc</div>
+            <div class="menu-item"><i class="fa-solid fa-chart-line"></i> Báo cáo thống kê</div>
+        </div>
+        <div style="padding: 20px; font-size: 12px; color: #64748b;">Phiên bản: 2026.1.0</div>
+    </aside>
+
+    <div class="main-wrapper">
+        <header>
+            <h3 id="current-page">Tiếp đón bệnh nhân</h3>
+            <div style="display:flex; align-items:center; gap:15px">
+                <span style="font-size:14px">Chào, <strong>Quản Trị Viên</strong></span>
+                <div style="width:35px; height:35px; border-radius:50%; background:#ddd; display:grid; place-items:center"><i class="fa-solid fa-user-tie"></i></div>
+            </div>
+        </header>
+
+        <div class="container">
+            
+            <section id="reception-view" class="view-section active">
+                <div class="card">
+                    <div class="card-header"><h2>Tạo hồ sơ bệnh nhân mới</h2></div>
+                    <form class="form-grid">
+                        <div class="form-group"><label>Họ và tên *</label><input type="text" value="Nguyễn Hoàng Quân"></div>
+                        <div class="form-group"><label>Ngày sinh (dd/MM/yyyy)</label><input type="text" value="15/04/1995"></div>
+                        <div class="form-group"><label>Giới tính</label><select><option>Nam</option><option>Nữ</option></select></div>
+                        <div class="form-group"><label>Số CCCD/CMND (Max 12)</label><input type="text" value="001095000123"></div>
+                        <div class="form-group"><label>Số điện thoại</label><input type="text" value="0901234567"></div>
+                        <div class="form-group"><label>Mã số BHYT</label><input type="text" placeholder="GD479..."></div>
+                        <div class="form-group"><label>Dân tộc</label><input type="text" value="Kinh"></div>
+                        <div class="form-group"><label>Quốc tịch</label><input type="text" value="Việt Nam"></div>
+                        <div class="form-group"><label>Nghề nghiệp</label><input type="text" value="Kỹ sư"></div>
+                        <div class="form-group span-3"><label>Địa chỉ liên lạc</label><textarea rows="2">Số 123, Đường Lê Lợi, Quận 1, TP. Hồ Chí Minh</textarea></div>
+                    </form>
+                    <div style="text-align: right; margin-top: 20px;">
+                        <button class="btn btn-ghost" style="margin-right:10px">Hủy bỏ</button>
+                        <button class="btn btn-primary">Lưu & Tiếp nhận khám</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header"><h2>Danh sách chờ khám hiện tại (3)</h2></div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>STT</th>
+                                <th>Họ tên</th>
+                                <th>Thời gian vào</th>
+                                <th>Đối tượng</th>
+                                <th>Phòng khám</th>
+                                <th>Trạng thái</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>01</td><td><strong>Lê Minh An</strong></td><td>08:30</td><td>BHYT</td><td>Nội tổng quát</td><td><span class="badge bg-success">Đang chờ</span></td></tr>
+                            <tr><td>02</td><td><strong>Trần Thu Hà</strong></td><td>08:45</td><td>Dịch vụ</td><td>Tai Mũi Họng</td><td><span class="badge bg-success">Đang chờ</span></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="admin-view" class="view-section">
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Danh sách Tài khoản & Nhân viên Y tế</h2>
+                        <button class="btn btn-success" onclick="toggleModal(true)">+ Thêm nhân sự mới</button>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Tên đăng nhập</th>
+                                <th>Họ tên nhân viên</th>
+                                <th>Chức danh</th>
+                                <th>Chuyên khoa</th>
+                                <th>CCHN (Chứng chỉ)</th>
+                                <th>Trạng thái</th>
+                                <th>Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>admin_quan</strong></td>
+                                <td>Hoàng Quân</td>
+                                <td>Quản trị viên</td>
+                                <td>Công nghệ thông tin</td>
+                                <td>---</td>
+                                <td><span class="badge bg-success">Hoạt động</span></td>
+                                <td>
+                                    <button class="action-btn" title="Sửa"><i class="fa-solid fa-user-pen"></i></button>
+                                    <button class="action-btn" title="Khóa" style="color:var(--danger)"><i class="fa-solid fa-user-lock"></i></button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>bacsi_minh</strong></td>
+                                <td>Trần Tuấn Minh</td>
+                                <td>Bác sĩ chuyên khoa</td>
+                                <td>Nội tổng quát</td>
+                                <td>001234/BYT-CCHN</td>
+                                <td><span class="badge bg-success">Hoạt động</span></td>
+                                <td>
+                                    <button class="action-btn"><i class="fa-solid fa-user-pen"></i></button>
+                                    <button class="action-btn" style="color:var(--danger)"><i class="fa-solid fa-user-lock"></i></button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <div class="modal" id="modal-account">
+        <div class="modal-content">
+            <h2 style="margin-bottom: 25px;">Cập nhật thông tin</h2>
+            <form class="form-grid">
+                <div class="form-group"><label>Tên đăng nhập (TEN_DANG_NHAP)</label><input type="text"></div>
+                <div class="form-group"><label>Mật khẩu (MAT_KHAU)</label><input type="password" value="********"></div>
+                <div class="form-group">
+                    <label>Quyền truy cập (QUYEN_TRUY_CAP)</label>
+                    <select><option>ADMIN</option><option>Bác sĩ</option><option>Lễ tân</option><option>Dược sĩ</option></select>
+                </div>
+                
+                <hr class="span-3" style="border:0; border-top: 1px dashed #ccc;">
+
+                <div class="form-group"><label>Tên nhân viên (TEN_NHAN_VIEN)</label><input type="text"></div>
+                <div class="form-group">
+                    <label>Giới tính</label>
+                    <select><option>Nam</option><option>Nữ</option></select>
+                </div>
+                <div class="form-group">
+                    <label>Chức danh (CHUC_DANH)</label>
+                    <select><option>Bác sĩ</option><option>Y tá</option><option>Kỹ thuật viên</option></select>
+                </div>
+                <div class="form-group"><label>Chuyên khoa (CHUYEN_KHOA)</label><input type="text" placeholder="Ví dụ: Nội nhi, Ngoại khoa..."></div>
+                <div class="form-group span-2"><label>Chứng chỉ hành nghề (CCHN)</label><input type="text" placeholder="Nhập số CCHN"></div>
+            </form>
+            <div style="text-align: right; margin-top: 30px;">
+                <button class="btn btn-ghost" onclick="toggleModal(false)" style="margin-right:10px">Đóng</button>
+                <button class="btn btn-primary" onclick="toggleModal(false)">Lưu</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function switchView(view) {
+            document.querySelectorAll('.view-section').forEach(v => v.classList.remove('active'));
+            document.querySelectorAll('.menu-item').forEach(m => m.classList.remove('active'));
+            
+            if(view === 'reception') {
+                document.getElementById('reception-view').classList.add('active');
+                document.getElementById('current-page').innerText = 'Tiếp đón bệnh nhân';
+                event.currentTarget.classList.add('active');
+            } else {
+                document.getElementById('admin-view').classList.add('active');
+                document.getElementById('current-page').innerText = 'Quản trị tài khoản & Nhân sự';
+                event.currentTarget.classList.add('active');
+            }
+        }
+
+        function toggleModal(show) {
+            const modal = document.getElementById('modal-account');
+            if(show) modal.classList.add('active');
+            else modal.classList.remove('active');
+        }
+    </script>
+</body>
+</html>

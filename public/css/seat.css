@@ -1,124 +1,183 @@
 /* public/css/seat.css */
 
-/* --- Container chính cho sơ đồ ghế --- */
+/* --- 1. NỀN POSTER & LỚP PHỦ ĐEN 20% --- */
+body.seat-selection-page {
+    margin: 0;
+    min-height: 100vh;
+    background-color: #000 !important; 
+    position: relative;
+    z-index: 0;
+    overflow-x: hidden;
+}
+
+body.seat-selection-page::before {
+    content: "";
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-image: var(--poster-url, url('https://via.placeholder.com/1920x1080')); 
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    z-index: -2;
+    display: block;
+}
+
+/* Lớp phủ đen đúng 20% */
+body.seat-selection-page::after {
+    content: "";
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: rgba(0, 0, 0, 0.2); 
+    z-index: -1;
+    pointer-events: none; 
+}
+
+/* --- 2. BỐ CỤC CHÍNH --- */
+.row.g-4 {
+    display: flex;
+    align-items: stretch;
+}
+
+.sidebar-sticky {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 20px;
+    z-index: 1000;
+}
+
+/* --- 3. MÀN HÌNH --- */
+.screen-container {
+    perspective: 1000px;
+    margin-bottom: 60px;
+    text-align: center;
+}
+
+.screen-curve {
+    background: linear-gradient(to bottom, #ffffff, #888);
+    width: 85%;
+    height: 8px;
+    border-radius: 50% / 100% 100% 0 0;
+    margin: 0 auto;
+    box-shadow: 0 -5px 25px rgba(255, 255, 255, 0.5);
+    transform: rotateX(25deg);
+}
+
+.screen-text {
+    color: #ffffff !important;
+    font-weight: 900;
+    letter-spacing: 12px;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+    margin-top: -65px;
+    position: relative;
+    z-index: 10;
+}
+
+/* --- 4. SƠ ĐỒ GHẾ --- */
 #seat-map {
     display: flex;
     flex-direction: column;
     align-items: center;
-    /* Căn giữa toàn bộ các hàng */
     gap: 12px;
-    /* Khoảng cách giữa các hàng */
-    overflow-x: auto;
-    /* Hỗ trợ lướt ngang trên mobile */
-    padding: 10px;
+    padding: 20px 0;
 }
 
-/* Định dạng từng hàng ghế */
 .seat-row {
-    width: 100%;
     display: flex;
     justify-content: center;
-    /* Căn giữa các ghế trong hàng */
-    gap: 8px;
-    /* Khoảng cách giữa các ghế */
+    gap: 10px;
+    align-items: center;
 }
 
-/* --- Định dạng cơ bản cho mỗi chiếc ghế --- */
 .seat-item {
-    width: 35px;
-    height: 35px;
-    background-color: #323232;
-    /* Màu xám đặc trưng */
-    border-radius: 6px 6px 2px 2px;
-    /* Hình dáng lưng ghế */
-    border: 1px solid #444;
-    cursor: pointer;
-    transition: all 0.2s ease-in-out;
+    width: 36px;
+    height: 36px;
+    border-radius: 6px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 11px;
-    font-weight: bold;
-    color: #ccc;
+    font-size: 10px;
+    font-weight: 800;
+    color: #ffffff !important; /* TẤT CẢ CHỮ TRẮNG */
+    transition: all 0.2s ease;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    cursor: pointer;
     user-select: none;
 }
 
-/* Ghế VIP */
-.seat-item.vip {
-    border: 2px solid #ffc107 !important;
+/* MÀU GHẾ THEO YÊU CẦU */
+
+/* 1. Ghế thường: Màu Tím */
+.seat-item.available { 
+    background: #6f42c1 !important; /* Purple */
 }
 
-/* Ghế Đã đặt */
+/* 2. Ghế VIP: Màu Đỏ */
+.seat-item.available.vip { 
+    background: #dc3545 !important; /* Red */
+    border: 1px solid #ffc107 !important; /* Viền vàng nhẹ cho VIP */
+}
+
+/* 3. Ghế đang chọn: Màu Xanh Lá */
+.seat-item.selected, .seat-item.available.selected, .seat-item.available.vip.selected {
+    background: #28a745 !important; /* Green */
+    transform: scale(1.15);
+    box-shadow: 0 0 15px rgba(40, 167, 69, 0.7);
+    border: 2px solid #ffffff !important;
+}
+
+/* 4. Ghế đã đặt: Màu Xám chữ trắng */
 .seat-item.occupied {
-    background-color: #111 !important;
+    background: #6c757d !important; /* Gray */
+    color: #ffffff !important; /* Chữ trắng */
     border: none;
-    color: #444 !important;
     cursor: not-allowed;
-    pointer-events: none;
-    /* Ngăn chặn mọi tương tác click */
+    opacity: 0.6;
 }
 
-/* Ghế Đang chọn - Màu đỏ CinéHub */
-.seat-item.selected {
-    background-color: #e50914 !important;
-    color: white !important;
-    border-color: #fff !important;
-    transform: scale(1.15) translateY(-2px);
-    /* Nhấc nhẹ ghế lên */
-    box-shadow: 0 0 15px rgba(229, 9, 20, 0.6);
+/* Nhãn hàng ghế (A, B, C...) */
+.row-label {
+    width: 30px;
+    text-align: center;
+    color: #ffffff !important; /* Chữ trắng */
+    font-weight: 900;
+    text-shadow: 1px 1px 3px rgba(0,0,0,1);
 }
 
-/* Hiệu ứng khi di chuột (chỉ áp dụng cho ghế trống) */
-.seat-item:not(.occupied):not(.selected):hover {
-    background-color: #505050;
-    transform: translateY(-3px);
-    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.4);
+/* --- 5. SIDEBAR TÓM TẮT --- */
+.order-summary-container {
+    background: rgba(15, 15, 15, 0.95);
+    backdrop-filter: blur(15px);
+    border-radius: 15px;
+    padding: 25px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-top: 5px solid #ff1e30;
 }
 
-/* --- Màn hình Cinema hiệu ứng phát sáng --- */
-.screen {
-    background-color: #fff;
-    width: 80%;
-    height: 8px;
-    border-radius: 50%;
-    margin: 0 auto 50px;
-    transform: rotateX(-45deg);
-    box-shadow: 0 10px 30px rgba(255, 255, 255, 0.5);
-    color: #fff;
+.movie-title {
+    color: #ff1e30;
     font-weight: bold;
-    text-shadow: 0 0 5px #000;
+    text-transform: uppercase;
 }
 
-/* Chú thích Legend */
+#selected-seats-text {
+    color: #28a745 !important; /* Hiện ghế đã chọn màu xanh lá cho đồng bộ */
+}
+
+/* --- 6. CHÚ THÍCH (LEGEND) --- */
 .legend-item {
-    display: flex;
-    align-items: center;
+    color: #ffffff;
+    font-size: 0.85rem;
 }
 
-.badge.seat-item {
-    width: 18px;
-    height: 18px;
-    margin-right: 8px;
+/* --- 7. RESPONSIVE --- */
+@media (max-width: 991px) {
+    .sidebar-sticky { position: relative; top: 0; }
+    .order-summary-container { margin-top: 30px; }
 }
 
-/* Sidebar Order Summary */
-.order-summary-card {
-    top: 90px;
-}
-
-/* --- Tối ưu hóa cho Mobile --- */
 @media (max-width: 576px) {
-    .seat-item {
-        width: 28px;
-        height: 28px;
-        font-size: 9px;
-    }
-
-    .seat-row {
-        gap: 5px !important;
-    }
-
-    #seat-map {
-        gap: 8px;
-    }
+    .seat-item { width: 28px; height: 28px; font-size: 8px; }
+    .seat-row { gap: 6px; }
 }
