@@ -76,19 +76,18 @@ async function loadSeatMap() {
             rows[rowLetter].forEach(seat => {
                 const seatDiv = document.createElement('div');
 
-                // Gán class mặc định
                 seatDiv.className = 'seat-item';
+                // Đảm bảo dòng này luôn chạy để gán tên ghế
                 seatDiv.innerText = seat.TEN_GHE_NGOI;
 
-                // Phân loại ghế VIP (Dựa vào cột PHU_PHI_GHE > 0)
                 if (parseFloat(seat.PHU_PHI_GHE) > 0) {
                     seatDiv.classList.add('vip');
                 }
 
-                // Trạng thái ghế: DA_DAT == 1 là đã có người mua
                 if (seat.DA_DAT == 1) {
                     seatDiv.classList.add('occupied');
-                    seatDiv.innerText = ''; // Xóa chữ cho ghế đã đặt
+                    // XÓA HOẶC COMMENT DÒNG DƯỚI ĐÂY:
+                    // seatDiv.innerText = '';  <-- Chặn dòng này lại để tên ghế không bị xóa
                 } else {
                     seatDiv.classList.add('available');
                     seatDiv.onclick = () => toggleSeat(seatDiv, seat);
@@ -191,21 +190,31 @@ async function confirmBooking() {
 }
 
 function updateCombo(id, delta, price) {
-    if (!selectedCombos[id]) selectedCombos[id] = { qty: 0, price: price };
+    if (!selectedCombos[id]) {
+        selectedCombos[id] = { qty: 0, price: parseFloat(price) };
+    }
     selectedCombos[id].qty += delta;
     if (selectedCombos[id].qty < 0) selectedCombos[id].qty = 0;
 
-    document.getElementById(`qty-${id}`).innerText = selectedCombos[id].qty;
-    updateFinalTotal();
+    const qtyEl = document.getElementById(`qty-${id}`);
+    if (qtyEl) qtyEl.innerText = selectedCombos[id].qty;
+
+    updateFinalTotal(); // Gọi hàm cập nhật tổng tiền
 }
 
 function updateFinalTotal() {
-    let totalGhe = selectedSeats.reduce((sum, s) => sum + basePrice + (parseFloat(s.PHU_PHI_GHE) || 0), 0);
+    // 1. Tiền ghế
+    const totalGhe = selectedSeats.reduce((sum, s) => sum + basePrice + (parseFloat(s.PHU_PHI_GHE) || 0), 0);
+
+    // 2. Tiền Combo (Đã thêm nhân số lượng)
     let totalCombo = 0;
     for (let id in selectedCombos) {
         totalCombo += selectedCombos[id].qty * selectedCombos[id].price;
     }
-    document.getElementById('total-final').innerText = (totalGhe + totalCombo).toLocaleString('vi-VN') + " VNĐ";
+
+    const totalFinal = totalGhe + totalCombo;
+    const el = document.getElementById('total-final');
+    if (el) el.innerText = totalFinal.toLocaleString('vi-VN') + " VNĐ";
 }
 
 function goToPayment() {
@@ -221,4 +230,32 @@ function goToPayment() {
         .join('|');
 
     window.location.href = `/api/ve/thanhtoan?maSC=${currentMaSuatChieu}&ghes=${seatIds}&combos=${comboData}`;
+}
+
+// public/js/seat.js
+
+async function loadShowtimeInfo() {
+    try {
+        const res = await fetch(`/api/suat-chieu/thong-tin/${currentMaSuatChieu}`);
+        const result = await res.json();
+
+        if (result.success && result.data) {
+            const data = result.data;
+
+            // Đổ dữ liệu text
+            document.getElementById('display-movie-name').innerText = data.TEN_PHIM;
+            document.getElementById('display-cinema-room').innerText = `${data.TEN_RAP} - ${data.TEN_PHONG_CHIEU}`;
+            document.getElementById('display-time').innerText = `Giờ chiếu: ${data.GIO_FORMAT} - ${data.NGAY_FORMAT}`;
+
+            // --- QUAN TRỌNG: GÁN POSTER VÀO NỀN BODY ---
+            if (data.HINH_ANH_POSTER) {
+                // Gán link ảnh vào biến CSS --poster-url
+                document.body.style.setProperty('--poster-url', `url('${data.HINH_ANH_POSTER}')`);
+            }
+
+            basePrice = parseFloat(data.GIA_VE_CO_BAN) || 0;
+        }
+    } catch (error) {
+        console.error("Lỗi load poster nền:", error);
+    }
 }

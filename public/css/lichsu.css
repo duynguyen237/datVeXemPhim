@@ -1,0 +1,140 @@
+/* public/css/lichsu.css */
+
+/*
+  💡 LƯU Ý: File này đã được dọn dẹp.
+  Màu nền, chữ và nút bấm dùng chung đã tự động lấy từ app.css!
+  Ở đây chỉ chứa thiết kế cho cái "Cuống Vé" (Invoice Card).
+*/
+
+/* --- ĐỊNH DẠNG THẺ HÓA ĐƠN --- */
+.invoice-card {
+    background: var(--bg-white);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Rê chuột vào thẻ sẽ nổi lên và có viền màu hồng MoMo */
+.invoice-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(216, 47, 139, 0.15);
+    border-color: var(--momo-pink);
+}
+
+/* Khối Icon bên trái */
+.invoice-icon-box {
+    background: var(--momo-bg-light);
+    min-width: 130px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-right: 2px dashed var(--border-color);
+}
+
+.invoice-icon-box i {
+    font-size: 2.5rem;
+    color: var(--momo-pink);
+}
+
+/* Khối Tổng tiền bên phải (Giống cuống vé) */
+.invoice-total-box {
+    background: var(--momo-bg-light);
+    min-width: 200px;
+    border-left: 2px dashed var(--border-color);
+    position: relative;
+}
+
+/* --- LỖ KHUYẾT CUỐNG VÉ --- */
+/* Cập nhật màu background tiệp với màu nền trang (bg-gray) để tạo cảm giác đục lỗ xuyên thấu */
+.invoice-total-box::before,
+.invoice-total-box::after {
+    content: '';
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    background: var(--bg-gray);
+    border-radius: 50%;
+    left: -13px;
+    border: 1px solid var(--border-color);
+}
+
+.invoice-total-box::before {
+    top: -12px;
+    border-bottom: none;
+    border-left: none;
+    transform: rotate(45deg);
+}
+
+.invoice-total-box::after {
+    bottom: -12px;
+    border-top: none;
+    border-right: none;
+    transform: rotate(45deg);
+}
+
+/* --- TÙY CHỈNH MODAL CHI TIẾT --- */
+.modal-content {
+    background: var(--bg-white);
+    border: none;
+    border-radius: 16px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+}
+
+.modal-header {
+    background: var(--momo-bg-light);
+    border-bottom: 1px solid var(--border-color);
+    border-radius: 16px 16px 0 0;
+}
+
+/* --- RESPONSIVE CHO MOBILE --- */
+@media (max-width: 768px) {
+    .invoice-card {
+        flex-direction: column !important;
+    }
+
+    .invoice-icon-box {
+        min-height: 100px;
+        border-right: none;
+        border-bottom: 2px dashed var(--border-color);
+    }
+
+    .invoice-total-box {
+        border-left: none;
+        border-top: 2px dashed var(--border-color);
+    }
+
+    /* Ẩn lỗ khuyết khi xem trên điện thoại cho khỏi bị lỗi giao diện */
+    .invoice-total-box::before,
+    .invoice-total-box::after {
+        display: none;
+    }
+}
+
+/* ÉP MÀU CHỮ HIỂN THỊ RÕ TRÊN NỀN TRẮNG */
+.invoice-card h4,
+.invoice-card h3,
+.invoice-card .fw-bold,
+.invoice-card span.text-white {
+    /* Sửa lỗi span bị dính class text-white */
+    color: var(--text-dark) !important;
+}
+
+.invoice-card p,
+.invoice-card .small,
+.invoice-card .text-light-gray {
+    color: var(--text-muted) !important;
+}
+
+/* Chỉnh lại khối chứa mã VNPay cho sáng sủa */
+.invoice-card [style*="rgba(255,255,255,0.05)"] {
+    background-color: #f3f4f6 !important;
+    border: 1px solid var(--border-color) !important;
+}
+
+.invoice-card .text-info {
+    color: #0284c7 !important;
+    /* Xanh dương đậm cho dễ đọc */
+}

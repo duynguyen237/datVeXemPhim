@@ -64,18 +64,34 @@ class HomeController {
 
     // 2. THÊM HÀM NÀY: Xử lý khi khách bấm gửi form đánh giá
     // Trong controllers/homeController.js
-    async submitReview(req, res) {
+    async submitReviewAPI(req, res) {
         try {
-            // Lấy maNguoiDung từ input ẩn trong Form thay vì lấy từ session
-            const { maPhim, maNguoiDung, noiDung } = req.body;
+            // 1. LẤY USER TỪ SESSION (Bảo mật 100%)
+            const user = req.session.user;
+            if (!user) {
+                return res.status(401).json({ success: false, message: "Vui lòng đăng nhập để đánh giá!" });
+            }
 
-            if (!maNguoiDung) return res.status(401).send("Vui lòng đăng nhập!");
+            // 2. Lấy dữ liệu từ Frontend gửi lên
+            const { maPhim, rating, noiDung } = req.body;
 
-            await danhGiaModel.create(maPhim, maNguoiDung, noiDung);
-            res.redirect('/review-phim');
+            // 3. RÀNG BUỘC (Tùy chọn ăn điểm 10): Kiểm tra xem user đã mua vé phim này chưa?
+            /* const phimDaXem = await phimModel.getPhimDaXem(user.MA_NGUOI_DUNG);
+            const daMuaVe = phimDaXem.some(p => p.MA_PHIM == maPhim);
+            if (!daMuaVe) {
+                return res.status(403).json({ success: false, message: "Bạn phải mua vé và xem phim này mới được đánh giá!" });
+            }
+            */
+
+            // 4. Lưu vào Database (Nhớ update hàm create trong Model để nhận thêm biến rating nhé)
+            await danhGiaModel.create(maPhim, user.MA_NGUOI_DUNG, rating, noiDung);
+
+            // Trả về JSON để Frontend xử lý mượt mà
+            res.json({ success: true, message: "Cảm ơn bạn đã gửi đánh giá!" });
+
         } catch (error) {
             console.error("Lỗi lưu đánh giá:", error);
-            res.status(500).send("Lỗi khi gửi đánh giá.");
+            res.status(500).json({ success: false, message: "Lỗi hệ thống khi gửi đánh giá." });
         }
     }
 }

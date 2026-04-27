@@ -3,54 +3,159 @@
 
 <head>
     <%- include('partials/head') %>
-        <title>Đăng Ký - Duy Movie</title>
-        <style>
-            .login-box {
-                max-width: 450px;
-                margin: 50px auto;
-            }
-        </style>
+    <title>Đăng Ký Thành Viên - Duy Movie</title>
+    <style>
+        body {
+            /* Nền tối sâu đồng bộ với trang đăng nhập */
+            background: radial-gradient(circle at center, #ffffff 0%, #ffffff 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .main-content {
+            flex: 1;
+            display: flex;
+            align-items: center;
+        }
+
+        /* THẺ TỔNG CHUYÊN NGHIỆP */
+        .register-card-custom {
+            background: #141414;
+            border-radius: 24px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+        }
+
+        /* HIỆU ỨNG INPUT ĐỒNG BỘ */
+        .form-control-custom {
+            background-color: #222 !important;
+            border: 1px solid #333 !important;
+            color: white !important;
+            border-radius: 12px !important;
+            padding: 12px 15px !important;
+            transition: all 0.3s ease !important;
+        }
+
+        .form-control-custom:focus {
+            background-color: #2a2a2a !important;
+            border-color: #e50914 !important;
+            box-shadow: 0 0 12px rgba(229, 9, 20, 0.2) !important;
+        }
+
+        /* NÚT BẤM */
+        .btn-cinema {
+            background-color: #e50914;
+            border: none;
+            border-radius: 12px;
+            padding: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-cinema:hover {
+            background-color: #ff0a16;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(229, 9, 20, 0.4);
+        }
+
+        /* LỚP PHỦ HÌNH ẢNH */
+        .img-overlay-container {
+            position: relative;
+        }
+
+        .img-overlay-container::after {
+            content: "";
+            position: absolute;
+            top: 0; right: 0; bottom: 0; left: 0;
+            background: linear-gradient(to right, transparent 50%, #141414 100%);
+        }
+    </style>
 </head>
-<body class="bg-dark">
+
+<body>
     <%- include('partials/header') %>
 
+    <div class="main-content py-5">
         <div class="container">
-            <div class="login-box card bg-secondary text-white p-4 shadow-lg border-0">
-                <h3 class="text-center fw-bold mb-4">TẠO TÀI KHOẢN</h3>
-                <form id="register-form">
-                    <div class="mb-3">
-                        <label class="form-label">Họ và Tên</label>
-                        <input type="text" id="reg-fullname" class="form-control" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Tên đăng nhập</label>
-                        <input type="text" id="reg-username" class="form-control" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Mật khẩu</label>
-                        <input type="password" id="reg-password" class="form-control" required>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">Số điện thoại</label>
-                            <input type="text" id="reg-phone" class="form-control" required>
+            <div class="row justify-content-center">
+                <div class="col-12 col-xl-11">
+                    
+                    <div class="row register-card-custom g-0">
+                        
+                        <div class="col-md-5 d-none d-md-block img-overlay-container">
+                            <img src="https://file.hstatic.net/200000503583/file/chup-anh-trong-rap-chieu-phim__17__0d4e0a187ae849faa4c9639217502c56.jpg" 
+                                 class="w-100 h-100 object-fit-cover" 
+                                 style="filter: brightness(0.7);"
+                                 alt="Cinema Membership">
                         </div>
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">Email</label>
-                            <input type="email" id="reg-email" class="form-control" required>
-                        </div>
-                    </div>
-                    <button type="submit" class="btn btn-danger w-100 fw-bold mt-2">ĐĂNG KÝ NGAY</button>
-                </form>
-                <div class="text-center mt-3 small">
-                    Đã có tài khoản? <a href="/login" class="text-warning text-decoration-none">Đăng nhập</a>
-                </div>
+
+                        <div class="col-md-7 p-4 p-lg-5">
+                            <div class="w-100">
+                                
+                                <div class="mb-4">
+                                    <h2 class="fw-bold text-white mb-1">TẠO TÀI KHOẢN</h2>
+                                    <p class="text-secondary">Trở thành thành viên của <span class="text-danger fw-bold">Duy Movie</span> để nhận ưu đãi vé.</p>
+                                </div>
+
+                                <form id="register-form">
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label text-secondary small fw-bold text-uppercase">Họ và Tên</label>
+                                            <input type="text" id="reg-fullname" class="form-control form-control-custom shadow-none" 
+                                                   placeholder="Nguyễn Văn A" required>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label text-secondary small fw-bold text-uppercase">Tên đăng nhập</label>
+                                            <input type="text" id="reg-username" class="form-control form-control-custom shadow-none" 
+                                                   placeholder="username123" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label text-secondary small fw-bold text-uppercase">Mật khẩu</label>
+                                        <input type="password" id="reg-password" class="form-control form-control-custom shadow-none" 
+                                               placeholder="••••••••" required>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-6 mb-4">
+                                            <label class="form-label text-secondary small fw-bold text-uppercase">Số điện thoại</label>
+                                            <input type="text" id="reg-phone" class="form-control form-control-custom shadow-none" 
+                                                   placeholder="0901xxxxxx" required>
+                                        </div>
+                                        <div class="col-md-6 mb-4">
+                                            <label class="form-label text-secondary small fw-bold text-uppercase">Email</label>
+                                            <input type="email" id="reg-email" class="form-control form-control-custom shadow-none" 
+                                                   placeholder="example@gmail.com" required>
+                                        </div>
+                                    </div>
+
+                                    <button type="submit" class="btn btn-cinema btn-lg w-100 text-white mb-4 shadow">
+                                        Đăng ký ngay
+                                    </button>
+                                </form>
+
+                                <div class="text-center">
+                                    <p class="text-secondary small">
+                                        Bạn đã có tài khoản rồi? 
+                                        <a href="/login" class="text-white fw-bold text-decoration-none border-bottom border-danger pb-1">
+                                            Đăng nhập tại đây
+                                        </a>
+                                    </p>
+                                </div>
+
+                            </div>
+                        </div> </div> </div>
             </div>
         </div>
+    </div>
 
-        <%- include('partials/footer') %>
-
-        <script src="/js/register.js"></script>
+    <%- include('partials/footer') %>
+    <script src="/js/register.js"></script>
 </body>
 
 </html>

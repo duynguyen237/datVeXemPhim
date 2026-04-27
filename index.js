@@ -12,12 +12,30 @@ const { poolPromise } = require('./config/db');
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
+// Thêm vào app.js
+app.get('/thanhtoan', (req, res) => res.render('thanhtoan'));
+
 // 2. Middlewares
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan('dev'));
 app.use(express.static(path.join(__dirname, 'public')));
+const session = require('express-session');
+
+app.use(session({
+    secret: 'DuyMovieSecretKey123!@#', // Khóa bảo mật (có thể đổi)
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false, maxAge: 24 * 60 * 60 * 1000 } // Thời gian sống 1 ngày
+}));
+
+// Middleware đẩy biến user ra toàn bộ các file giao diện (.ejs)
+app.use((req, res, next) => {
+    // Biến res.locals.user sẽ tự động xuất hiện ở mọi file HTML
+    res.locals.user = req.session.user || null;
+    next();
+});
 
 // 3. Import Models & Routers
 // LƯU Ý: Chỉ khai báo hoadonModel DUY NHẤT 1 lần ở đây

@@ -24,7 +24,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 const result = await response.json();
 
                 if (result.success) {
+                    // Lưu thông tin user vào localStorage
                     localStorage.setItem('user', JSON.stringify(result.user));
+
                     Swal.fire({
                         icon: 'success',
                         title: 'Đăng nhập thành công!',
@@ -32,13 +34,24 @@ document.addEventListener('DOMContentLoaded', function () {
                         timer: 1500,
                         showConfirmButton: false
                     }).then(() => {
-                        window.location.href = '/'; 
+                        // CHỈNH SỬA TẠI ĐÂY: 
+                        // Nếu server trả về redirectUrl (ví dụ /admin/dashboard), ta đi theo nó.
+                        // Nếu không có, mặc định về trang chủ '/'.
+                        window.location.href = result.redirectUrl || '/'; 
                     });
                 } else {
-                    Swal.fire({ icon: 'error', title: 'Lỗi!', text: result.message || 'Đăng nhập thất bại!' });
+                    Swal.fire({ 
+                        icon: 'error', 
+                        title: 'Lỗi!', 
+                        text: result.message || 'Đăng nhập thất bại!' 
+                    });
                 }
             } catch (error) {
-                Swal.fire({ icon: 'error', title: 'Oops...', text: 'Lỗi kết nối server!' });
+                Swal.fire({ 
+                    icon: 'error', 
+                    title: 'Oops...', 
+                    text: 'Lỗi kết nối server!' 
+                });
             }
         });
     }

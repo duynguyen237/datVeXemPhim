@@ -1,31 +1,46 @@
 /* public/css/thanhtoan.css */
-#final-total {
-    color: #e50914 !important;
-    font-size: 1.75rem;
-    font-weight: 800;
-    text-shadow: 0 0 15px rgba(229, 9, 20, 0.3);
-}
+
 .checkout-box {
-    background: #1a1a1a;
-    border: 1px solid #333;
-    border-radius: 15px;
-    padding: 25px;
-}
-.form-control {
-    background: #2a2a2a;
-    border: 1px solid #444;
-    color: white;
-}
-.form-control:focus {
-    background: #333;
-    color: white;
-    border-color: #dc3545;
-    box-shadow: none;
-}
-.table {
-    color: white;
+    background: var(--bg-white);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 30px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
 }
 
-.table td {
-    border-color: #333;
+#final-total {
+    color: var(--momo-pink) !important;
+    font-size: 2rem;
+    font-weight: 800;
+}
+
+/* Input Form */
+.form-control {
+    background: #f9fafb;
+    border: 1px solid #d1d5db;
+    color: var(--text-dark);
+    padding: 12px 15px;
+    border-radius: 8px;
+}
+
+.form-control:focus {
+    background: #ffffff;
+    border-color: var(--momo-pink);
+    box-shadow: 0 0 0 4px var(--momo-bg-light);
+}
+
+/* Table */
+.table {
+    color: var(--text-dark);
+}
+
+.table td,
+.table th {
+    border-color: var(--border-color);
+    padding: 15px 10px;
+}
+
+.table-dark {
+    background-color: var(--bg-gray);
+    color: var(--text-muted);
 }

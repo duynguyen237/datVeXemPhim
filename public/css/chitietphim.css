@@ -1,0 +1,171 @@
+/* public/css/chitietphim.css */
+
+/* --- BỎ HERO BANNER ĐEN THUI --- */
+.hero-backdrop {
+    background: var(--bg-white);
+    padding: 40px 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.movie-poster {
+    border-radius: 16px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+}
+
+/* --- THÔNG TIN PHIM & BOX ĐẶT VÉ --- */
+.detail-box,
+#booking-area {
+    background: var(--bg-white);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 30px;
+    margin-bottom: 25px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+}
+
+.info-label {
+    color: var(--text-muted);
+    width: 120px;
+    display: inline-block;
+    font-weight: 500;
+}
+
+/* --- THANH CHỌN 7 NGÀY --- */
+.date-tabs-container {
+    display: flex;
+    overflow-x: auto;
+    gap: 12px;
+    padding-bottom: 10px;
+}
+
+.date-tabs-container::-webkit-scrollbar {
+    display: none;
+}
+
+.date-tab {
+    background: #ffffff;
+    border: 1px solid #d1d5db;
+    border-radius: 12px;
+    min-width: 85px;
+    padding: 12px 5px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.date-tab .day-name {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    font-weight: bold;
+}
+
+.date-tab .date-number {
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: var(--text-dark);
+}
+
+/* Trạng thái Hover & Active */
+.date-tab:hover {
+    border-color: var(--momo-pink);
+    background: var(--momo-bg-light);
+}
+
+.date-tab.active {
+    background: var(--momo-pink);
+    border-color: var(--momo-pink);
+    box-shadow: 0 4px 12px rgba(216, 47, 139, 0.3);
+}
+
+.date-tab.active .day-name,
+.date-tab.active .date-number {
+    color: #ffffff;
+}
+
+/* --- RẠP & NÚT GIỜ CHIẾU --- */
+.cinema-block {
+    background: var(--bg-gray);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.cinema-title {
+    color: var(--text-dark);
+    font-size: 1.1rem;
+    font-weight: 800;
+    border-bottom: 1px dashed var(--border-color);
+    padding-bottom: 12px;
+    margin-bottom: 15px;
+}
+
+.btn-time {
+    background: #ffffff !important;
+    border: 1px solid #d1d5db !important;
+    min-width: 120px;
+    padding: 12px !important;
+    border-radius: 10px;
+    transition: 0.2s;
+    cursor: pointer;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.btn-time:hover {
+    border-color: var(--momo-pink) !important;
+    background: var(--momo-bg-light) !important;
+    transform: translateY(-2px);
+}
+
+.time-text {
+    color: var(--momo-pink) !important;
+    font-size: 1.4rem;
+    font-weight: 800;
+}
+
+.room-text {
+    color: var(--text-muted) !important;
+    font-size: 13px;
+    font-weight: 600;
+    margin-top: 5px;
+}
+
+/* --- RATE SAO --- */
+.star-rating {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+}
+
+.star-rating input {
+    display: none;
+}
+
+.star-rating label {
+    color: #d1d5db;
+    /* Sao rỗng màu xám nhạt */
+    font-size: 1.8rem;
+    padding: 0 4px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+/* Đổi màu vàng cho sao */
+.star-rating input:checked~label,
+.star-rating label:hover,
+.star-rating label:hover~label {
+    color: #fbbf24;
+}
+
+.comment-item {
+    background: #ffffff;
+    border: 1px solid var(--border-color);
+    border-left: 4px solid var(--momo-pink);
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}

@@ -7,26 +7,26 @@ class ghe {
             const result = await pool.request()
                 .input('maSC', sql.Int, maSuatChieu)
                 .query(`
-                    SELECT 
-                        g.MA_GHE_NGOI, 
-                        g.TEN_GHE_NGOI, 
-                        g.LOAI_GHE, -- Giả sử bạn có cột phân loại VIP/Thường
-                        g.GIA_GHE_NGOI AS PHU_PHI, -- Tiền cộng thêm của ghế
-                        sc.GIA_VE_CO_BAN,
-                        -- Kiểm tra xem ghế này đã có vé trong suất chiếu này chưa
-                        CASE 
-                            WHEN EXISTS (
-                                SELECT 1 FROM VE_XEM_PHIM v 
-                                WHERE v.MA_GHE_NGOI = g.MA_GHE_NGOI 
-                                AND v.MA_SUAT_CHIEU = sc.MA_SUAT_CHIEU
-                            ) THEN 1 
-                            ELSE 0 
-                        END AS DA_DAT
-                    FROM GHE_NGOI g
-                    JOIN SUAT_CHIEU sc ON g.MA_PHONG_CHIEU = sc.MA_PHONG_CHIEU
-                    WHERE sc.MA_SUAT_CHIEU = @maSC
-                    ORDER BY g.TEN_GHE_NGOI ASC
-                `);
+                SELECT 
+                    sc.MA_SUAT_CHIEU,
+                    sc.GIA_VE_CO_BAN,
+                    FORMAT(sc.GIO_BAT_DAU, 'HH:mm') AS GIO_FORMAT,
+                    FORMAT(sc.NGAY_CHIEU, 'dd/MM/yyyy') AS NGAY_FORMAT,
+                    p.TEN_PHIM,
+                    p.HINH_ANH_POSTER, -- Cột poster quan trọng để làm nền
+                    r.TEN_RAP,
+                    pc.TEN_PHONG_CHIEU
+                FROM 
+                    SUAT_CHIEU sc
+                JOIN 
+                    PHIM p ON sc.MA_PHIM = p.MA_PHIM
+                JOIN 
+                    PHONG_CHIEU pc ON sc.MA_PHONG_CHIEU = pc.MA_PHONG_CHIEU
+                JOIN 
+                    THONG_TIN_RAP r ON pc.MA_RAP = r.MA_RAP
+                WHERE 
+                    sc.MA_SUAT_CHIEU = @maSC
+            `);
             return result.recordset;
         } catch (error) {
             console.error("Lỗi getBySuatChieu:", error);
@@ -52,6 +52,10 @@ class ghe {
             WHERE sc.MA_SUAT_CHIEU = @maSC
             ORDER BY g.TEN_GHE_NGOI ASC
         `);
+
+        // --- LOG RA TERMINAL Ở ĐÂY ---
+        console.log("Dữ liệu SQL trả về:", result.recordset[0]);
+
         return result.recordset;
     }
     async insertGhe({ maPhong, tenGhe, gia }) {

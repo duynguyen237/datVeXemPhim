@@ -4,93 +4,10 @@
 <head>
     <%- include('partials/head') %>
         <title>Hóa Đơn Của Tôi - CinéHub</title>
-        <style>
-            .invoice-card {
-                background: #222222;
-                border: 1px solid #444;
-                border-radius: 12px;
-                overflow: hidden;
-                transition: transform 0.2s, box-shadow 0.2s;
-            }
-
-            .invoice-card:hover {
-                transform: translateY(-3px);
-                box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
-                border-color: #e50914;
-            }
-
-            .invoice-icon-box {
-                background: #1a1a1a;
-                min-width: 130px;
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                align-items: center;
-                border-right: 1px dashed #555;
-            }
-
-            .invoice-icon-box i {
-                font-size: 2.5rem;
-                color: #e50914;
-            }
-
-            .text-light-gray {
-                color: #ced4da !important;
-            }
-
-            .invoice-total-box {
-                background: #1a1a1a;
-                min-width: 200px;
-                border-left: 2px dashed #555;
-                position: relative;
-            }
-
-            /* Tạo lỗ khuyết đặc trưng của vé/hóa đơn */
-            .invoice-total-box::before,
-            .invoice-total-box::after {
-                content: '';
-                position: absolute;
-                width: 20px;
-                height: 20px;
-                background: #212529;
-                border-radius: 50%;
-                left: -11px;
-            }
-
-            .invoice-total-box::before {
-                top: -10px;
-            }
-
-            .invoice-total-box::after {
-                bottom: -10px;
-            }
-
-            .modal-content {
-                border-radius: 15px;
-                box-shadow: 0 0 30px rgba(229, 9, 20, 0.2);
-            }
-
-            @media (max-width: 768px) {
-                .invoice-icon-box {
-                    min-height: 100px;
-                    border-right: none;
-                    border-bottom: 1px dashed #555;
-                }
-
-                .invoice-total-box {
-                    border-left: none;
-                    border-top: 2px dashed #555;
-                }
-
-                .invoice-total-box::before,
-                .invoice-total-box::after {
-                    display: none;
-                }
-            }
-        </style>
+        <link rel="stylesheet" href="/css/lichsu.css">
 </head>
 
-<body class="bg-dark text-white">
+<body>
     <%- include('partials/header') %>
 
         <div class="container mt-5 mb-5" style="min-height: 60vh;">
@@ -136,7 +53,7 @@
 
                                             <div class="p-4 flex-grow-1">
                                                 <div class="d-flex justify-content-between align-items-start mb-2">
-                                                    <h4 class="fw-bold text-white mb-0">
+                                                    <h4 class="fw-bold mb-0">
                                                         Mã Hóa Đơn: <span class="text-danger">#<%= hd.MA_HOA_DON %>
                                                         </span>
                                                     </h4>
@@ -147,10 +64,10 @@
                                                 </div>
 
                                                 <p class="text-light-gray small mb-3">
-                                                    Ngày đặt: <span class="text-white">
+                                                    Ngày đặt: <span class="text-dark">
                                                         <%= new Date(hd.NGAY_DAT_VE).toLocaleDateString('vi-VN') %>
                                                     </span>
-                                                    | Giờ: <span class="text-white">
+                                                    | Giờ: <span class="text-dark">
                                                         <%= hd.GIO_DAT_VE || '--:--' %>
                                                     </span>
                                                 </p>
@@ -233,7 +150,7 @@
                                 
                                 <div class="mt-4 pt-3 border-top border-secondary d-flex justify-content-between align-items-center">
                                     <span class="text-secondary">Thanh toán qua VNPay</span>
-                                    <h3 class="text-white fw-bold mb-0">${(d.TONG_TIEN_THANH_TOAN || 0).toLocaleString('vi-VN')}đ</h3>
+                                    <h3 class="text-dark fw-bold mb-0">${(d.TONG_TIEN_THANH_TOAN || 0).toLocaleString('vi-VN')}đ</h3>
                                 </div>
                             </div>
                         </div>

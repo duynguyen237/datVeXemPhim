@@ -1,22 +1,37 @@
-/* Thêm biến màu MoMo lên đầu file app.css */
+/* public/css/app.css */
+
+/* =========================================
+   1. BIẾN MÀU TOÀN CỤC (MOMO STYLE)
+   ========================================= */
 :root {
     --momo-pink: #d82f8b;
     --momo-pink-dark: #a50064;
     --momo-bg-light: #fdf2f8;
-    /* Nền banner */
-    --momo-bg-dark: #171717;
+    /* Nền hồng siêu nhạt */
+    --momo-border: #fbcfe8;
+
+    --bg-white: #ffffff;
+    --bg-gray: #f8f9fa;
+    /* Nền xám nhạt cho trang */
+    --text-dark: #1f2937;
+    --text-muted: #6b7280;
+    --border-color: #e5e7eb;
 }
 
-/* 1. Sửa lại tông màu nền của cả trang thành Sáng */
+/* =========================================
+   2. CẤU HÌNH BODY CHUNG
+   ========================================= */
 body {
-    background-color: #ffffff;
-    color: #333333;
+    background-color: var(--bg-gray) !important;
+    color: var(--text-dark);
     font-family: 'Roboto', 'Segoe UI', Tahoma, sans-serif;
     margin: 0;
     padding: 0;
 }
 
-/* 2. Ghi đè màu Danger của Bootstrap thành màu Hồng MoMo */
+/* =========================================
+   3. GHI ĐÈ BOOTSTRAP (ĐỎ -> HỒNG MOMO)
+   ========================================= */
 .text-danger {
     color: var(--momo-pink) !important;
 }
@@ -47,7 +62,9 @@ body {
     color: white !important;
 }
 
-/* 3. Sửa lại thẻ Phim (Bỏ nền đen, viền) */
+/* =========================================
+   4. THẺ PHIM DÙNG CHUNG
+   ========================================= */
 .movie-card {
     background: transparent !important;
     border: none !important;
@@ -63,20 +80,18 @@ body {
 
 .movie-info {
     padding: 15px 0 !important;
-    /* Bỏ padding 2 bên để chữ can mép ảnh */
     text-align: left !important;
-    /* Căn trái giống MoMo */
-    color: #333;
+    color: var(--text-dark);
 }
 
 .movie-info h3 {
     font-weight: 700;
-    color: #1f2937;
+    color: var(--text-dark);
 }
 
 .movie-info p.text-secondary {
     font-size: 14px;
-    color: #6b7280 !important;
+    color: var(--text-muted) !important;
 }
 
 .text-clamp-3 {
@@ -87,5 +102,4 @@ body {
     overflow: hidden;
     text-overflow: ellipsis;
     line-height: 1.5;
-    /* Giúp chữ không bị cắt đuôi */
 }

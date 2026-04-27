@@ -1,50 +1,23 @@
-/* CSS Dành riêng cho trang chủ (phong cách MoMo) */
+/* public/css/home.css */
 
-/* Cấu hình màu chủ đạo */
-:root {
-    --momo-pink: #d82d8b;
-    --momo-pink-dark: #a50064;
-}
+/*
+  💡 LƯU Ý: Các biến màu (:root), màu nút bấm (btn-danger) và khung thẻ phim cơ bản
+  đã được gom chung vào app.css.
+  File này chỉ chứa CSS dành riêng cho BỐ CỤC TRANG CHỦ!
+*/
 
-/* Đè màu Đỏ (danger) mặc định của Bootstrap thành màu Hồng MoMo */
-.text-danger {
-    color: var(--momo-pink) !important;
-}
-
-.bg-danger {
-    background-color: var(--momo-pink) !important;
-}
-
-.btn-danger {
-    background-color: var(--momo-pink) !important;
-    border-color: var(--momo-pink) !important;
-}
-
-.btn-danger:hover {
-    background-color: var(--momo-pink-dark) !important;
-    border-color: var(--momo-pink-dark) !important;
-}
-
-.btn-outline-danger {
-    color: var(--momo-pink) !important;
-    border-color: var(--momo-pink) !important;
-}
-
-.btn-outline-danger:hover,
-.btn-check:checked+.btn-outline-danger {
-    background-color: var(--momo-pink) !important;
-    color: #fff !important;
-}
-
-/* Gạch dọc màu hồng bên cạnh Tiêu đề */
+/* --- 1. Gạch dọc màu hồng bên cạnh Tiêu đề --- */
 .title-border {
     border-left: 5px solid var(--momo-pink);
     padding-left: 12px;
+    color: var(--text-dark);
+    /* Đổi sang màu tối cho hợp nền sáng */
 }
 
-/* Ẩn thanh cuộn của Dải phim nằm ngang */
+/* --- 2. Dải phim cuộn ngang (Horizontal Scroll) --- */
 .custom-scrollbar::-webkit-scrollbar {
     display: none;
+    /* Ẩn thanh cuộn xấu xí */
 }
 
 .custom-scrollbar {
@@ -53,44 +26,98 @@
     scrollbar-width: none;
     /* Firefox */
     scroll-snap-type: x mandatory;
+    /* Bắt dính mép thẻ phim khi vuốt */
+    padding-bottom: 15px;
+    /* Để hiệu ứng shadow không bị cắt phần dưới */
 }
 
 .custom-scrollbar>.movie-card {
     scroll-snap-align: start;
 }
 
-/* Hiệu ứng Movie Card */
+/* --- 3. Hiệu ứng Hover Ảnh Poster riêng cho Trang Chủ --- */
 .movie-card {
     cursor: pointer;
 }
 
 .movie-poster-wrapper {
+    position: relative;
+    /* Dùng làm gốc để chứa overlay nút Play */
+    border-radius: 12px;
+    overflow: hidden;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* Hover: Scale ảnh và nổi shadow */
+/* Hover: Nhấc ảnh lên và tỏa bóng màu hồng đặc trưng */
 .movie-card:hover .movie-poster-wrapper {
     transform: translateY(-8px);
-    box-shadow: 0 10px 25px rgba(216, 45, 139, 0.3) !important;
+    box-shadow: 0 12px 25px rgba(216, 47, 139, 0.3) !important;
 }
 
-/* Overlay nút Play mờ ảo */
+/* Màn sương mờ và Nút Play hiện lên khi rê chuột */
 .movie-overlay {
-    background: rgba(0, 0, 0, 0.4);
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    /* Sương mờ màu đen */
+    display: flex;
+    align-items: center;
+    justify-content: center;
     opacity: 0;
     transition: all 0.3s ease;
 }
 
 .movie-card:hover .movie-overlay {
     opacity: 1;
+    /* Hiển thị lên */
 }
 
-/* Tùy chỉnh input search và select */
+/* Chỉnh nút Play ở giữa */
+.movie-overlay i {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 3.5rem;
+    filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.6));
+    transition: transform 0.2s ease;
+}
+
+.movie-card:hover .movie-overlay i {
+    transform: scale(1.15);
+    /* Nút play to lên một chút tạo cảm giác bấm */
+}
+
+/* --- 4. Tùy chỉnh thanh Tìm kiếm --- */
+.search-input-group {
+    background: var(--bg-white);
+    border: 1px solid var(--border-color);
+    border-radius: 50px;
+    /* Bo tròn 2 đầu cho giống thanh tìm kiếm app Mobile */
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03);
+}
+
+.search-input-group input {
+    border: none !important;
+    background: transparent;
+    color: var(--text-dark);
+}
+
 .search-input-group input:focus {
     outline: none;
+    box-shadow: none;
+}
+
+/* Nút Lọc rạp/thể loại */
+.select-custom {
+    background-color: var(--bg-white);
+    color: var(--text-dark);
+    border-color: var(--border-color);
 }
 
 .select-custom:focus {
-    box-shadow: none;
+    box-shadow: 0 0 0 3px var(--momo-bg-light);
+    /* Viền glow hồng nhạt */
     border-color: var(--momo-pink) !important;
 }
