@@ -91,7 +91,6 @@ async function loadOrderDetails() {
 
         // 3. ĐỔ DỮ LIỆU VÀ CẬP NHẬT TỔNG TIỀN
         body.innerHTML = htmlRows || '<tr><td colspan="3" class="text-center text-muted">Đơn hàng trống</td></tr>';
-
         // Đảm bảo cập nhật đúng ID final-total trong EJS của em
         const finalTotalEl = document.getElementById('final-total');
         if (finalTotalEl) {
